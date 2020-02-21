@@ -1,1 +1,1 @@
-# spring-angular-template
+# spring-docker-template
