@@ -13,4 +13,4 @@ COPY ./src ./src
 # Build for release
 RUN mvn package
 
-CMD ["java", "-jar", "./target/demo.jar"]
+CMD ["java -Dserver.port=$PORT", "-jar", "./target/demo.jar"]
