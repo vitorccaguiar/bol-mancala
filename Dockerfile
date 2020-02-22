@@ -13,5 +13,4 @@ COPY ./src ./src
 # Build for release
 RUN mvn package
 
-CMD [ "sh", "-c", "java -Dserver.port=8086 -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8 -XX:+UseContainerSupport -Djava.security.egd=file:/dev/./urandom -jar ./target/demo.jar" ]
-# CMD ["java -Dserver.port=8086", "-jar", "./target/demo.jar"]
+CMD ["java", "-jar", "./target/demo.jar"]
