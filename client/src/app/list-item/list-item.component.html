@@ -8,7 +8,7 @@
   <div class="item">
     <strong>Status: </strong><span>{{status}}</span>
   </div>
-  <div class="item">
+  <div class="item" *ngIf="status !== 'Playing'">
     <button mat-raised-button color="primary" (click)="joinGame()">Join</button>
   </div>
 </mat-card>

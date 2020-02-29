@@ -18,7 +18,7 @@ export class GameService {
 
   play(play: Play): Promise<any> {
     return this.httpClient.post<any>(
-      `${environment.apiUrl}/`,
+      `${environment.apiUrl}/game/play`,
       play,
       this.getHeaders(),
     ).toPromise();
