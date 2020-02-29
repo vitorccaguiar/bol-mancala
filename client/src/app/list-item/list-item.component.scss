@@ -1,0 +1,11 @@
+.mainCard {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  align-items: center;
+  background-color: #f8efef;
+}
+
+.item {
+  flex-shrink: 0;
+}

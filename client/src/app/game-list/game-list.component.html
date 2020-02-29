@@ -1,0 +1,11 @@
+<mat-card class="list">
+  <h3>Games List</h3>
+  <mat-divider></mat-divider>
+  <div class="items" *ngFor="let game of games">
+    <app-list-item 
+      [firstPlayerName]='game.firstPlayerName'
+      [secondPlayerName]='game.secondPlayerName'
+      [status]='game.status'>
+    </app-list-item>
+  </div>
+</mat-card>

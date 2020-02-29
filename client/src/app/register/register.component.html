@@ -1,0 +1,10 @@
+<mat-card class="mainCard">
+  <h2>Register</h2>
+  <mat-divider></mat-divider>
+  <form class="registerForm">
+    <mat-form-field>
+      <input matInput name="playerName" type="text" placeholder="Player name" [(ngModel)]="playerName">
+    </mat-form-field>
+  </form>
+  <button mat-raised-button color="primary" (click)="saveName()">Begin</button>
+</mat-card>
