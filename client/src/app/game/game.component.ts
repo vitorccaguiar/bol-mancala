@@ -23,10 +23,11 @@ export class GameComponent implements OnInit {
     this.router.navigate(['menu']);
   }
 
-  play(player: number, position: number): void {
+  async play(player: number, position: number): Promise<void> {
     const play = new Play();
     play.player = player;
     play.position = position;
-    this.gameService.play(play);
+    const test = await this.gameService.play(play);
+    window.alert(test);
   }
 }
