@@ -17,7 +17,11 @@ export class AuthGuardService implements CanActivate {
   }
 
   hasNameRegistered(): boolean {
-    return true;
+    if (localStorage.getItem('playerName')) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }

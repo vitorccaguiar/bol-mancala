@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Play } from '../objects/play';
-import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-game',
@@ -14,7 +12,7 @@ export class GameComponent implements OnInit {
   firstPlayerPits = [];
   secondPlayerPits = [];
 
-  constructor(private router: Router, private gameService: GameService) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
@@ -24,10 +22,6 @@ export class GameComponent implements OnInit {
   }
 
   async play(player: number, position: number): Promise<void> {
-    const play = new Play();
-    play.player = player;
-    play.position = position;
-    const test = await this.gameService.play(play);
-    window.alert(test);
+
   }
 }

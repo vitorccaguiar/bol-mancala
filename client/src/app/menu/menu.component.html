@@ -1,7 +1,10 @@
 <mat-card class="mainCard">
   <h2>Menu</h2>
   <mat-divider></mat-divider>
+  <div class="playerName">
+    Welcome, <strong>{{playerName}}</strong>
+  </div>
   <app-game-list></app-game-list>
-  <button mat-raised-button class="button" color="primary" (click)="addGame()">New Game</button>
+  <button mat-raised-button class="button" color="primary" (click)="newGame()">New Game</button>
   <button mat-raised-button class="button" color="primary" (click)="changeName()">Change Name</button>
 </mat-card>
