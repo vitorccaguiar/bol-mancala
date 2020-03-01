@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatchService } from '../services/match.service';
+import { Match } from '../objects/match';
+import { Status } from '../objects/status';
 
 @Component({
   selector: 'app-menu',
@@ -21,9 +23,19 @@ export class MenuComponent implements OnInit {
     this.playerName = localStorage.getItem('playerName');
   }
 
-  newGame() {
-
-    this.router.navigate(['game']);
+  async newGame() {
+    try {
+      const match = new Match();
+      match.firstPlayerName = this.playerName;
+      match.firstPlayerPits = [6, 6, 6, 6, 6, 6, 0];
+      match.status = Status.WAITING_PLAYER;
+      await this.matchService.createMatch(match);
+      this.router.navigate(['match']);
+    } catch (e) {
+      this.snackbar.open('Error while creating the match!', 'Close', {
+        duration: 3000
+      });
+    }
   }
 
   changeName() {

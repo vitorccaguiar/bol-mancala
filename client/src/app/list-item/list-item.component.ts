@@ -17,7 +17,7 @@ export class ListItemComponent implements OnInit {
   }
 
   joinGame() {
-    this.router.navigate(['game']);
+    this.router.navigate(['match']);
   }
 
 }

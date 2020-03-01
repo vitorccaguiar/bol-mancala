@@ -2,19 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { User } from '../objects/user';
+import { BaseService } from './base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService extends BaseService {
 
-  constructor(private httpClient: HttpClient) { }
-
-  getHeaders(): any {
-    return {
-      responseType: 'application/json',
-    };
-  }
+  constructor(private httpClient: HttpClient) {
+    super();
+   }
 
   createUser(user: User): Promise<any> {
     return this.httpClient.post<any>(

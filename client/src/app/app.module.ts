@@ -15,18 +15,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 import { MenuComponent } from './menu/menu.component';
-import { GameListComponent } from './game-list/game-list.component';
+import { MatchListComponent } from './match-list/match-list.component';
 import { ListItemComponent } from './list-item/list-item.component';
-import { GameComponent } from './game/game.component';
+import { MatchComponent } from './match/match.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegisterComponent,
     MenuComponent,
-    GameListComponent,
+    MatchListComponent,
     ListItemComponent,
-    GameComponent
+    MatchComponent
   ],
   imports: [
     BrowserModule,

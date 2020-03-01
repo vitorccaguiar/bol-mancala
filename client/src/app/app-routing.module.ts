@@ -3,13 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from './services/auth-guard.service';
 import { RegisterComponent } from './register/register.component';
 import { MenuComponent } from './menu/menu.component';
-import { GameComponent } from './game/game.component';
+import { MatchComponent } from './match/match.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'register', pathMatch: 'full'},
   { path: 'register', component: RegisterComponent },
   { path: 'menu', component: MenuComponent, canActivate: [AuthGuardService] },
-  { path: 'game', component: GameComponent, canActivate: [AuthGuardService] },
+  { path: 'match', component: MatchComponent, canActivate: [AuthGuardService] },
 ];
 
 @NgModule({
