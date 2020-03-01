@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Match } from '../objects/match';
 
 @Component({
   selector: 'app-list-item',
@@ -7,9 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./list-item.component.scss']
 })
 export class ListItemComponent implements OnInit {
-  @Input() firstPlayerName: string;
-  @Input() secondPlayerName: string | undefined;
-  @Input() status: string;
+  @Input() match: Match;
 
   constructor(private router: Router) { }
 

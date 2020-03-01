@@ -2,6 +2,7 @@ package com.bol.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import com.bol.entity.Match;
 import com.bol.repository.MatchRepository;
@@ -31,5 +32,14 @@ public class MatchService {
       System.out.println(ex.getMessage());
     }
     return Collections.emptyList();
+  }
+
+  public Optional<Match> getMatchById(String id) {
+    try {
+      return matchRepository.findById(id);
+    } catch(Exception ex) {
+      System.out.println(ex.getMessage());
+    }
+    return null;
   }
 }

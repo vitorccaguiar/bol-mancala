@@ -29,7 +29,8 @@ export class MenuComponent implements OnInit {
       match.firstPlayerName = this.playerName;
       match.firstPlayerPits = [6, 6, 6, 6, 6, 6, 0];
       match.status = Status.WAITING_PLAYER;
-      await this.matchService.createMatch(match);
+      const returnedMatch = await this.matchService.saveMatch(match);
+      localStorage.setItem('matchId', (JSON.parse(returnedMatch) as Match).id);
       this.router.navigate(['match']);
     } catch (e) {
       this.snackbar.open('Error while creating the match!', 'Close', {

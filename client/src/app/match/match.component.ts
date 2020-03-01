@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Match } from '../objects/match';
+import { MatchService } from '../services/match.service';
 
 @Component({
   selector: 'app-match',
@@ -7,17 +9,21 @@ import { Router } from '@angular/router';
   styleUrls: ['./match.component.scss']
 })
 export class MatchComponent implements OnInit {
-  firstPlayerName = 'Vitor';
-  secondPlayerName = 'Loraine';
-  firstPlayerPits = [];
-  secondPlayerPits = [];
+  match: Match;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private matchService: MatchService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const matchId = localStorage.getItem('matchId');
+    let returnedMatch = await this.matchService.getMatchById(matchId);
+    returnedMatch = JSON.parse(returnedMatch) as Match;
+    this.match = returnedMatch;
+    console.log(this.match);
   }
 
-  backToMenu(): void {
+  leave(): void {
+    localStorage.removeItem('matchId');
     this.router.navigate(['menu']);
   }
 

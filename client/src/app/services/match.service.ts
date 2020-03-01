@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ɵConsole } from '@angular/core';
 import { BaseService } from './base.service';
 import { HttpClient, HttpEvent } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -13,7 +13,7 @@ export class MatchService extends BaseService {
     super();
   }
 
-  createMatch(match: Match): Promise<any> {
+  saveMatch(match: Match): Promise<any> {
     return this.httpClient.post<any>(
       `${environment.apiUrl}/match`,
       match,
@@ -24,6 +24,13 @@ export class MatchService extends BaseService {
   getAllMatches(): Promise<any> {
     return this.httpClient.get<Match[]>(
       `${environment.apiUrl}/match`,
+      this.getHeaders(),
+    ).toPromise();
+  }
+
+  getMatchById(id: string): Promise<any> {
+    return this.httpClient.get<Match>(
+      `${environment.apiUrl}/match/${id}`,
       this.getHeaders(),
     ).toPromise();
   }

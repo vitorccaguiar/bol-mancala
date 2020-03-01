@@ -4,10 +4,8 @@
     <mat-divider></mat-divider>
   </div>
   <div class="items" *ngFor="let match of matches">
-    <app-list-item 
-      [firstPlayerName]='match.firstPlayerName'
-      [secondPlayerName]='match.secondPlayerName'
-      [status]='match.status'>
+    <app-list-item
+      [match] = 'match'>
     </app-list-item>
   </div>
 </mat-card>
