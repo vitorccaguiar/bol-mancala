@@ -1,5 +1,6 @@
 package com.bol.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,13 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/match")
 public class MatchController {
+  HashMap<String, String> playerMatch = new HashMap<>();
+  HashMap<String, String> playerMachine = new HashMap<>();
 
   @Autowired
   private MatchService matchService;
 
   @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-  public Match saveMatch(@RequestBody Match match) {
-    return matchService.saveMatch(match);
+  public Match saveMatch(@RequestBody String playerId, @RequestBody String fingerprint) {
+    Match returnedMatch = matchService.saveMatch(playerId);
+    playerMatch.put(playerId, returnedMatch.getId());
+    playerMachine.put(playerId, fingerprint);
   }
 
   @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

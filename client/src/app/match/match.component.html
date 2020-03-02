@@ -1,68 +1,72 @@
 <mat-card class="mainCard">
   <h2>Match</h2>
   <mat-divider></mat-divider>
-  <mat-card class="board">
-    <div class="firstPlayerBigPit">
+  <div class="vitor">
+    <mat-card class="board">
       <mat-card class="bigPit">
         <strong>Big pit</strong>
-        <p class="counter">0</p>
+        <div class="counter">
+          <p class="counter__content">0</p>
+        </div>
       </mat-card>
-    </div>
-    <div class="playerName" *ngIf="match.status !== 'Waiting player'">
-      <strong>{{match.secondPlayerName}}</strong>
-    </div>
-    <div class="playerName" *ngIf="match.status === 'Waiting player'">
-      <strong>Waiting player...</strong>
-    </div>
-    <div class="firstPlayerPits">
-      <mat-card class="pit" (click)="play(2, 5)">
-        <p class="counter">6</p>
-      </mat-card>
-      <mat-card class="pit" (click)="play(2, 4)">
-        <p class="counter">6</p>
-      </mat-card>
-      <mat-card class="pit" (click)="play(2, 3)">
-        <p class="counter">6</p>
-      </mat-card>
-      <mat-card class="pit" (click)="play(2, 2)">
-        <p class="counter">6</p>
-      </mat-card>
-      <mat-card class="pit" (click)="play(2, 1)">
-        <p class="counter">6</p>
-      </mat-card>
-      <mat-card class="pit" (click)="play(2, 0)">
-        <p class="counter">6</p>
-      </mat-card>
-    </div>
-    <div class="secondPlayerPits">
-      <mat-card class="pit" (click)="play(1, 5)">
-        <p class="counter">6</p>
-      </mat-card>
-      <mat-card class="pit" (click)="play(1, 4)">
-        <p class="counter">6</p>
-      </mat-card>
-      <mat-card class="pit" (click)="play(1, 3)">
-        <p class="counter">6</p>
-      </mat-card>
-      <mat-card class="pit" (click)="play(1, 2)">
-        <p class="counter">6</p>
-      </mat-card>
-      <mat-card class="pit" (click)="play(1, 1)">
-        <p class="counter">6</p>
-      </mat-card>
-      <mat-card class="pit" (click)="play(1, 0)">
-        <p class="counter">6</p>
-      </mat-card>
-    </div>
-    <div class="playerName">
-      <strong>{{match.firstPlayerName}}</strong>
-    </div>
-    <div class="secondPlayerBigPit">
+      <!-- <div class="playerName" *ngIf="match.status !== 'Waiting player'">
+        <strong>{{match.secondPlayerName}}</strong>
+      </div> -->
+      <!-- <div class="playerName" *ngIf="match.status === 'Waiting player'">
+        <strong>Waiting player...</strong>
+      </div> -->
+      <div class="pits-wrapper">
+        <div class="pits">
+          <mat-card class="pit" (click)="play(2, 5)">
+            <p class="counter">6</p>
+          </mat-card>
+          <mat-card class="pit" (click)="play(2, 4)">
+            <p class="counter">6</p>
+          </mat-card>
+          <mat-card class="pit" (click)="play(2, 3)">
+            <p class="counter">6</p>
+          </mat-card>
+          <mat-card class="pit" (click)="play(2, 2)">
+            <p class="counter">6</p>
+          </mat-card>
+          <mat-card class="pit" (click)="play(2, 1)">
+            <p class="counter">6</p>
+          </mat-card>
+          <mat-card class="pit" (click)="play(2, 0)">
+            <p class="counter">6</p>
+          </mat-card>
+        </div>
+        <div class="pits">
+          <mat-card class="pit" (click)="play(1, 5)">
+            <p class="counter">6</p>
+          </mat-card>
+          <mat-card class="pit" (click)="play(1, 4)">
+            <p class="counter">6</p>
+          </mat-card>
+          <mat-card class="pit" (click)="play(1, 3)">
+            <p class="counter">6</p>
+          </mat-card>
+          <mat-card class="pit" (click)="play(1, 2)">
+            <p class="counter">6</p>
+          </mat-card>
+          <mat-card class="pit" (click)="play(1, 1)">
+            <p class="counter">6</p>
+          </mat-card>
+          <mat-card class="pit" (click)="play(1, 0)">
+            <p class="counter">6</p>
+          </mat-card>
+        </div>
+      </div>
+      <!-- <div class="playerName">
+        <strong>{{match.firstPlayerName}}</strong>
+      </div> -->
       <mat-card class="bigPit">
         <strong>Big pit</strong>
-        <p class="counter">0</p>
+        <div class="counter">
+          <p class="counter__content">0</p>
+        </div>
       </mat-card>
-    </div>
-  </mat-card>
+    </mat-card>
+  </div>
   <button mat-raised-button class="menuButton" color="warn" (click)="leave()">Leave Game</button>
 </mat-card>

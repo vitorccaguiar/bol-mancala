@@ -9,6 +9,16 @@
       "mainClass": "com.example.demo.DemoApplication",
       "projectName": "demo",
       "args": ""
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-ApiApplication<api>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "com.bol.configuration.ApiApplication",
+      "projectName": "api",
+      "args": ""
     }
   ]
 }
