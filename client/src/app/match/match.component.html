@@ -1,20 +1,14 @@
 <mat-card class="mainCard">
   <h2>Match</h2>
   <mat-divider></mat-divider>
-  <div class="vitor">
+  <div class="grid">
     <mat-card class="board">
       <mat-card class="bigPit">
         <strong>Big pit</strong>
         <div class="counter">
-          <p class="counter__content">0</p>
+          <p>0</p>
         </div>
       </mat-card>
-      <!-- <div class="playerName" *ngIf="match.status !== 'Waiting player'">
-        <strong>{{match.secondPlayerName}}</strong>
-      </div> -->
-      <!-- <div class="playerName" *ngIf="match.status === 'Waiting player'">
-        <strong>Waiting player...</strong>
-      </div> -->
       <div class="pits-wrapper">
         <div class="pits">
           <mat-card class="pit" (click)="play(2, 5)">
@@ -57,13 +51,10 @@
           </mat-card>
         </div>
       </div>
-      <!-- <div class="playerName">
-        <strong>{{match.firstPlayerName}}</strong>
-      </div> -->
       <mat-card class="bigPit">
         <strong>Big pit</strong>
         <div class="counter">
-          <p class="counter__content">0</p>
+          <p>0</p>
         </div>
       </mat-card>
     </mat-card>

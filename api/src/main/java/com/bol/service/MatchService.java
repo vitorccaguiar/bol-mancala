@@ -1,10 +1,15 @@
 package com.bol.service;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+import com.bol.constants.MatchStatus;
+import com.bol.constants.MessageStatus;
+import com.bol.entity.InputMessage;
 import com.bol.entity.Match;
+import com.bol.entity.OutputMessage;
+import com.bol.entity.User;
 import com.bol.repository.MatchRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,31 +20,58 @@ public class MatchService {
 
   @Autowired
   private MatchRepository matchRepository;
+  @Autowired
+  private UserService userService;
 
-  public Match saveMatch(Match match) {
-    try {
-      return matchRepository.save(match);
-    } catch(Exception ex) {
-      System.out.println(ex.getMessage());
+  Map<String, String> playerMatch = new HashMap<>();
+  Map<String, String> playerMachine = new HashMap<>();
+
+  public OutputMessage send(InputMessage message) {
+    if (message.getType() == MessageStatus.NEW) {
+      return this.createMatch(message);
+    } else if (message.getType() == MessageStatus.UPDATE) {
+      return this.updateMatch(message);
     }
-    return null;
+    return new OutputMessage(MessageStatus.ERROR, null);
   }
 
-  public List<Match> getAllMatches() {
+  public OutputMessage createMatch(InputMessage message) {
     try {
-      return matchRepository.findAll();
+      Optional<User> player = userService.getUserById(message.getPlayerId());
+      if (player.isPresent()) {
+        Match newMatch = new Match();
+        newMatch.setFirstPlayer(player.get());
+        newMatch.setStatus(MatchStatus.WAITING_PLAYER);
+        matchRepository.save(newMatch);
+
+        playerMatch.put(message.getPlayerId(), newMatch.getId());
+        playerMachine.put(message.getPlayerId(), message.getFingerprint());
+        return new OutputMessage(MessageStatus.CREATED, newMatch);
+      }
+      return new OutputMessage(MessageStatus.ERROR, null);
     } catch(Exception ex) {
       System.out.println(ex.getMessage());
+      return new OutputMessage(MessageStatus.ERROR, null);
     }
-    return Collections.emptyList();
   }
 
-  public Optional<Match> getMatchById(String id) {
+  public OutputMessage updateMatch(InputMessage message) {
     try {
-      return matchRepository.findById(id);
+      Optional<User> player = userService.getUserById(message.getPlayerId());
+      if (player.isPresent()) {
+        Match newMatch = new Match();
+        newMatch.setFirstPlayer(player.get());
+        newMatch.setStatus(MatchStatus.WAITING_PLAYER);
+        matchRepository.save(newMatch);
+
+        playerMatch.put(message.getPlayerId(), newMatch.getId());
+        playerMachine.put(message.getPlayerId(), message.getFingerprint());
+        return new OutputMessage(MessageStatus.NEW, newMatch);
+      }
+      return new OutputMessage(MessageStatus.ERROR, null);
     } catch(Exception ex) {
       System.out.println(ex.getMessage());
+      return new OutputMessage(MessageStatus.ERROR, null);
     }
-    return null;
   }
 }

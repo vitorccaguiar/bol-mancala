@@ -1,5 +1,7 @@
 package com.bol.service;
 
+import java.util.Optional;
+
 import com.bol.entity.User;
 import com.bol.repository.UserRepository;
 
@@ -36,6 +38,15 @@ public class UserService {
   public User getUserByName(String name) {
     try {
       return userRepository.findByName(name);
+    } catch(Exception e) {
+      System.out.println(e.getMessage());
+    }
+    return null;
+  }
+
+  public Optional<User> getUserById(String id) {
+    try {
+      return userRepository.findById(id);
     } catch(Exception e) {
       System.out.println(e.getMessage());
     }

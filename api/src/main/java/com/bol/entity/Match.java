@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "Matches")
 public class Match {
   private String id;
-  private String firstPlayerName;
-  private String secondPlayerName;
+  private User firstPlayer;
+  private User secondPlayer;
   private String status;
   private Integer[] firstPlayerPits;
   private Integer[] secondPlayerPits;
@@ -19,29 +19,29 @@ public class Match {
   /**
    * @return the firstPlayerName
    */
-  public String getFirstPlayerName() {
-    return firstPlayerName;
+  public User getFirstPlayer() {
+    return firstPlayer;
   }
 
   /**
    * @param firstPlayerName the firstPlayerName to set
    */
-  public void setFirstPlayerName(String firstPlayerName) {
-    this.firstPlayerName = firstPlayerName;
+  public void setFirstPlayer(User firstPlayer) {
+    this.firstPlayer = firstPlayer;
   }
 
   /**
    * @return the secondPlayerName
    */
-  public String getSecondPlayerName() {
-    return secondPlayerName;
+  public User getSecondPlayer() {
+    return secondPlayer;
   }
 
   /**
    * @param secondPlayerName the secondPlayerName to set
    */
-  public void setSecondPlayerName(String secondPlayerName) {
-    this.secondPlayerName = secondPlayerName;
+  public void setSecondPlayer(User secondPlayer) {
+    this.secondPlayer = secondPlayer;
   }
 
   /**

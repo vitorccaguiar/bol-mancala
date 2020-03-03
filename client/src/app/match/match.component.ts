@@ -15,15 +15,10 @@ export class MatchComponent implements OnInit {
               private matchService: MatchService) { }
 
   async ngOnInit() {
-    const matchId = localStorage.getItem('matchId');
-    let returnedMatch = await this.matchService.getMatchById(matchId);
-    returnedMatch = JSON.parse(returnedMatch) as Match;
-    this.match = returnedMatch;
-    console.log(this.match);
+
   }
 
   leave(): void {
-    localStorage.removeItem('matchId');
     this.router.navigate(['menu']);
   }
 

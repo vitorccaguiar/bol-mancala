@@ -1,37 +1,35 @@
-import { Injectable, ɵConsole } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
-import { HttpClient, HttpEvent } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Match } from '../objects/match';
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
+import { OutputMessage } from '../objects/output-message';
+import { InputMessage } from '../objects/input-message';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MatchService extends BaseService {
+  private stompClient: any;
 
-  constructor(private httpClient: HttpClient) {
+  constructor() {
     super();
+    this.initializeWebSocketConnection();
   }
 
-  saveMatch(match: Match): Promise<any> {
-    return this.httpClient.post<any>(
-      `${environment.apiUrl}/match`,
-      match,
-      this.getHeaders(),
-    ).toPromise();
+  initializeWebSocketConnection() {
+    const websocket = new SockJS(environment.socketUrl);
+    this.stompClient = Stomp.over(websocket);
+    this.stompClient.connect({}, function() {
+      this.stompClient.subscribe('/messages', (message: OutputMessage) => {
+
+      });
+    });
   }
 
-  getAllMatches(): Promise<any> {
-    return this.httpClient.get<Match[]>(
-      `${environment.apiUrl}/match`,
-      this.getHeaders(),
-    ).toPromise();
+  sendMessage(message: InputMessage) {
+    this.stompClient.send('/game/match', {}, message);
   }
 
-  getMatchById(id: string): Promise<any> {
-    return this.httpClient.get<Match>(
-      `${environment.apiUrl}/match/${id}`,
-      this.getHeaders(),
-    ).toPromise();
-  }
 }

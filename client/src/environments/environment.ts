@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8086',
+  socketUrl: 'http://localhost:8086/game',
 };
 
 /*
