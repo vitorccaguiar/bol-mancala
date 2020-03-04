@@ -9,7 +9,7 @@ import { MatchService } from '../services/match.service';
   styleUrls: ['./match.component.scss']
 })
 export class MatchComponent implements OnInit {
-  match: Match;
+  match: Match = new Match();
 
   constructor(private router: Router,
               private matchService: MatchService) { }

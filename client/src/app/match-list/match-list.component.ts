@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Match } from '../objects/match';
-import { MatchService } from '../services/match.service';
+import { MenuService } from '../services/menu.service';
 
 @Component({
   selector: 'app-match-list',
@@ -10,10 +10,10 @@ import { MatchService } from '../services/match.service';
 export class MatchListComponent implements OnInit {
   matches: Match[];
 
-  constructor(private matchService: MatchService) { }
+  constructor(private menuService: MenuService) { }
 
   async ngOnInit() {
-    const returnedMatches = await this.matchService.getAllMatches();
+    const returnedMatches = await this.menuService.getAllMatches();
     this.matches = JSON.parse(returnedMatches) as Match[];
   }
 

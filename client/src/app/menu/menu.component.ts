@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { getPromise as getFingerPrint, x64hash128 } from 'fingerprintjs2';
 import { UserService } from '../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatchService } from '../services/match.service';
 import { Match } from '../objects/match';
 import { Status } from '../objects/status';
+import { MenuService } from '../services/menu.service';
 
 @Component({
   selector: 'app-menu',
@@ -16,7 +18,7 @@ export class MenuComponent implements OnInit {
 
   constructor(private router: Router,
               private userService: UserService,
-              private matchService: MatchService,
+              private menuService: MenuService,
               private snackbar: MatSnackBar) { }
 
   ngOnInit() {
@@ -25,7 +27,9 @@ export class MenuComponent implements OnInit {
 
   async newGame() {
     try {
-      const returnedMatch = await this.matchService.saveMatch(match);
+      const returnedMatch = await this.menuService.createMatch(
+        localStorage.getItem('playerId'), await this.getWorkstationFingerprint());
+      localStorage.setItem('matchId', (JSON.parse(returnedMatch) as Match).id);
       this.router.navigate(['match']);
     } catch (e) {
       this.snackbar.open('Error while creating the match!', 'Close', {
@@ -52,6 +56,12 @@ export class MenuComponent implements OnInit {
         duration: 3000
       });
     }
+  }
+
+  async getWorkstationFingerprint() {
+    const components = await getFingerPrint();
+    const values = components.map(component => component.value);
+    return x64hash128(values.join(''), 31);
   }
 
 }

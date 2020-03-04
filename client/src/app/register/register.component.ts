@@ -14,8 +14,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(private router: Router,
               private userService: UserService,
-              private snackbar: MatSnackBar
-    ) { }
+              private snackbar: MatSnackBar) { }
 
   ngOnInit() {
   }

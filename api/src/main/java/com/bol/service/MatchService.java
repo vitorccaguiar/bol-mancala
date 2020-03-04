@@ -23,36 +23,14 @@ public class MatchService {
   @Autowired
   private UserService userService;
 
-  Map<String, String> playerMatch = new HashMap<>();
-  Map<String, String> playerMachine = new HashMap<>();
+  public static Map<String, String> playerMatch = new HashMap<>();
+  public static Map<String, String> playerMachine = new HashMap<>();
 
   public OutputMessage send(InputMessage message) {
-    if (message.getType() == MessageStatus.NEW) {
-      return this.createMatch(message);
-    } else if (message.getType() == MessageStatus.UPDATE) {
+    if (message.getType() == MessageStatus.UPDATE) {
       return this.updateMatch(message);
     }
     return new OutputMessage(MessageStatus.ERROR, null);
-  }
-
-  public OutputMessage createMatch(InputMessage message) {
-    try {
-      Optional<User> player = userService.getUserById(message.getPlayerId());
-      if (player.isPresent()) {
-        Match newMatch = new Match();
-        newMatch.setFirstPlayer(player.get());
-        newMatch.setStatus(MatchStatus.WAITING_PLAYER);
-        matchRepository.save(newMatch);
-
-        playerMatch.put(message.getPlayerId(), newMatch.getId());
-        playerMachine.put(message.getPlayerId(), message.getFingerprint());
-        return new OutputMessage(MessageStatus.CREATED, newMatch);
-      }
-      return new OutputMessage(MessageStatus.ERROR, null);
-    } catch(Exception ex) {
-      System.out.println(ex.getMessage());
-      return new OutputMessage(MessageStatus.ERROR, null);
-    }
   }
 
   public OutputMessage updateMatch(InputMessage message) {
@@ -69,7 +47,7 @@ public class MatchService {
         return new OutputMessage(MessageStatus.NEW, newMatch);
       }
       return new OutputMessage(MessageStatus.ERROR, null);
-    } catch(Exception ex) {
+    } catch (Exception ex) {
       System.out.println(ex.getMessage());
       return new OutputMessage(MessageStatus.ERROR, null);
     }

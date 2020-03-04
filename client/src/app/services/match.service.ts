@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { environment } from '../../environments/environment';
-import { Match } from '../objects/match';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { OutputMessage } from '../objects/output-message';
