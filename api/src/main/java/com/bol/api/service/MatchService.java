@@ -1,16 +1,16 @@
-package com.bol.service;
+package com.bol.api.service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.bol.constants.MatchStatus;
-import com.bol.constants.MessageStatus;
-import com.bol.entity.InputMessage;
-import com.bol.entity.Match;
-import com.bol.entity.OutputMessage;
-import com.bol.entity.User;
-import com.bol.repository.MatchRepository;
+import com.bol.api.constant.MatchStatus;
+import com.bol.api.constant.MessageStatus;
+import com.bol.api.entity.InputMessage;
+import com.bol.api.entity.Match;
+import com.bol.api.entity.OutputMessage;
+import com.bol.api.entity.User;
+import com.bol.api.repository.MatchRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

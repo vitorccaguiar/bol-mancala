@@ -1,9 +1,9 @@
-package com.bol.service;
+package com.bol.api.service;
 
 import java.util.Optional;
 
-import com.bol.entity.User;
-import com.bol.repository.UserRepository;
+import com.bol.api.entity.User;
+import com.bol.api.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.bol.entity;
+package com.bol.api.entity;
 
 public class OutputMessage {
     private String type;

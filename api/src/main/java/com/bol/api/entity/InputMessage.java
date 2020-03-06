@@ -1,4 +1,4 @@
-package com.bol.entity;
+package com.bol.api.entity;
 
 public class InputMessage {
     private String type;

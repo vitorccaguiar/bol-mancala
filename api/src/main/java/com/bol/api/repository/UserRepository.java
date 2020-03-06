@@ -1,6 +1,6 @@
-package com.bol.repository;
+package com.bol.api.repository;
 
-import com.bol.entity.User;
+import com.bol.api.entity.User;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

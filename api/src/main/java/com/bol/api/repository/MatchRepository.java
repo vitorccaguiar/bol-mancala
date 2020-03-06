@@ -1,6 +1,6 @@
-package com.bol.repository;
+package com.bol.api.repository;
 
-import com.bol.entity.Match;
+import com.bol.api.entity.Match;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

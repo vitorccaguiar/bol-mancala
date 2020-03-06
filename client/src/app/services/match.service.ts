@@ -14,21 +14,28 @@ export class MatchService extends BaseService {
 
   constructor() {
     super();
-    this.initializeWebSocketConnection();
+    this.connect();
   }
 
-  initializeWebSocketConnection() {
-    const websocket = new SockJS(environment.socketUrl);
-    this.stompClient = Stomp.over(websocket);
-    this.stompClient.connect({}, function() {
-      this.stompClient.subscribe('/messages', (message: OutputMessage) => {
-
-      });
+  connect() {
+    const socket = new SockJS('http://localhost:8080/mancala-websocket');
+    this.stompClient = Stomp.over(socket);
+    this.stompClient.connect({}, (frame) => {
+        console.log('Connected: ' + frame);
+        this.stompClient.subscribe('/match/greetings', (greeting) => {
+          console.log('Subscribed');
+        });
     });
   }
 
-  sendMessage(message: InputMessage) {
-    this.stompClient.send('/game/match', {}, message);
+  disconnect() {
+      if (this.stompClient !== null) {
+          this.stompClient.disconnect();
+      }
+      console.log('Disconnected');
   }
 
+  sendName() {
+      this.stompClient.send('/app/hello', {}, 'Message');
+  }
 }

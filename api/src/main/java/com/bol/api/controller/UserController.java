@@ -1,9 +1,9 @@
-package com.bol.controller;
+package com.bol.api.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bol.entity.User;
-import com.bol.service.UserService;
+import com.bol.api.entity.User;
+import com.bol.api.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

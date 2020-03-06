@@ -1,4 +1,4 @@
-package com.bol.constants;
+package com.bol.api.constant;
 
 public class MatchStatus {
     public static final String WAITING_PLAYER = "Waiting player";

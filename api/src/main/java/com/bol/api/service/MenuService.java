@@ -1,13 +1,13 @@
-package com.bol.service;
+package com.bol.api.service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.bol.constants.MatchStatus;
-import com.bol.entity.Match;
-import com.bol.entity.User;
-import com.bol.repository.MatchRepository;
+import com.bol.api.constant.MatchStatus;
+import com.bol.api.entity.Match;
+import com.bol.api.entity.User;
+import com.bol.api.repository.MatchRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

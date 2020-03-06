@@ -1,4 +1,4 @@
-package com.bol.constants;
+package com.bol.api.constant;
 
 public class MessageStatus {
     public static final String NEW = "new";

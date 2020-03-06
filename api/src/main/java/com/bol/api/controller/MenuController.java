@@ -1,10 +1,10 @@
-package com.bol.controller;
+package com.bol.api.controller;
 
 import java.util.List;
 
-import com.bol.entity.InputMessage;
-import com.bol.entity.Match;
-import com.bol.service.MenuService;
+import com.bol.api.entity.InputMessage;
+import com.bol.api.entity.Match;
+import com.bol.api.service.MenuService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

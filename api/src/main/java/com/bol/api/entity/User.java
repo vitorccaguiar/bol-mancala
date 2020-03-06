@@ -1,4 +1,4 @@
-package com.bol.entity;
+package com.bol.api.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
