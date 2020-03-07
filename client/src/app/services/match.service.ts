@@ -18,12 +18,13 @@ export class MatchService extends BaseService {
   }
 
   connect() {
-    const socket = new SockJS('http://localhost:8080/mancala-websocket');
+    const socket = new SockJS(environment.websocketUrl);
     this.stompClient = Stomp.over(socket);
     this.stompClient.connect({}, (frame) => {
         console.log('Connected: ' + frame);
-        this.stompClient.subscribe('/match/greetings', (greeting) => {
-          console.log('Subscribed');
+        this.stompClient.subscribe('/match/join', (outputMessage: OutputMessage) => {
+          console.log('Returned message');
+          console.log(outputMessage);
         });
     });
   }
@@ -35,7 +36,7 @@ export class MatchService extends BaseService {
       console.log('Disconnected');
   }
 
-  sendName() {
-      this.stompClient.send('/app/hello', {}, 'Message');
+  sendJoinMessage(message: InputMessage) {
+      this.stompClient.send('/app/join', {}, JSON.stringify(message));
   }
 }

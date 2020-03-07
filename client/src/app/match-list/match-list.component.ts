@@ -13,6 +13,10 @@ export class MatchListComponent implements OnInit {
   constructor(private menuService: MenuService) { }
 
   async ngOnInit() {
+    this.refresh();
+  }
+
+  async refresh() {
     const returnedMatches = await this.menuService.getAllMatches();
     this.matches = JSON.parse(returnedMatches) as Match[];
   }

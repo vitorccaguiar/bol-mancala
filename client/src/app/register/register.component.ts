@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { User } from '../objects/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatchService } from '../services/match.service';
 
 @Component({
   selector: 'app-register',
@@ -15,8 +14,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(private router: Router,
               private userService: UserService,
-              private snackbar: MatSnackBar,
-              private matchService: MatchService) { }
+              private snackbar: MatSnackBar) { }
 
   ngOnInit() {
   }

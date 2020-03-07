@@ -3,9 +3,7 @@ import { Router } from '@angular/router';
 import { getPromise as getFingerPrint, x64hash128 } from 'fingerprintjs2';
 import { UserService } from '../services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatchService } from '../services/match.service';
 import { Match } from '../objects/match';
-import { Status } from '../objects/status';
 import { MenuService } from '../services/menu.service';
 
 @Component({

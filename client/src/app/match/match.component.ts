@@ -15,7 +15,7 @@ export class MatchComponent implements OnInit {
               private matchService: MatchService) { }
 
   async ngOnInit() {
-
+    this.match.id = localStorage.getItem('matchId');
   }
 
   leave(): void {
