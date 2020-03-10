@@ -29,7 +29,11 @@ export class MatchService extends BaseService {
   // }
 
   sendJoinMessage(stompClient: any, message: InputMessage): void {
-      stompClient.send('/app/join', {}, JSON.stringify(message));
+    stompClient.send('/app/join', {}, JSON.stringify(message));
+  }
+
+  sendPlayMessage(stompClient: any, message: InputMessage): void {
+    stompClient.send('/app/play', {}, JSON.stringify(message));
   }
 
   getMatchById(matchId: string): Promise<any> {

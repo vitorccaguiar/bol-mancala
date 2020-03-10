@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { getPromise as getFingerPrint, x64hash128 } from 'fingerprintjs2';
 import { Match } from '../objects/match';
 import { MatchService } from '../services/match.service';
 import { OutputMessage } from '../objects/output-message';
+import { InputMessage } from '../objects/input-message';
+import { MessageStatus } from '../objects/message-status';
 
 @Component({
   selector: 'app-match',
@@ -20,7 +23,6 @@ export class MatchComponent implements OnInit {
     this.match.id = localStorage.getItem('matchId');
     const result = await this.matchService.getMatchById(this.match.id);
     this.match = JSON.parse(result) as Match;
-    console.log(this.match.playerTurn.name);
     this.stompClient = this.matchService.getStompClient();
     this.stompClient.connect({}, (frame) => {
       this.listenJoin();
@@ -37,7 +39,17 @@ export class MatchComponent implements OnInit {
     this.router.navigate(['menu']);
   }
 
-  async play(player: number, position: number): Promise<void> {
+  async play(position: number): Promise<void> {
+    const message = new InputMessage();
+    message.type = MessageStatus.PLAY;
+    message.playerId = localStorage.getItem('playerId');
+    message.fingerprint = await this.getWorkstationFingerprint();
+    message.match = this.match;
+  }
 
+  async getWorkstationFingerprint() {
+    const components = await getFingerPrint();
+    const values = components.map(component => component.value);
+    return x64hash128(values.join(''), 31);
   }
 }
