@@ -5,4 +5,5 @@ export class InputMessage {
     playerId: string;
     fingerprint: string;
     match: Match;
+    play: Play;
 }

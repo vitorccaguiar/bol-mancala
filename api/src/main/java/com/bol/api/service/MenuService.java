@@ -24,9 +24,7 @@ public class MenuService {
     try {
       Optional<User> player = userService.getUserById(playerId);
       if (player.isPresent()) {
-        Match newMatch = new Match();
-        newMatch.setFirstPlayer(player.get());
-        newMatch.setStatus(MatchStatus.WAITING_PLAYER);
+        Match newMatch = getInitialMatchObject(player.get(), fingerprint);
         matchRepository.save(newMatch);
 
         MatchService.playerMatch.put(playerId, newMatch.getId());
@@ -47,5 +45,18 @@ public class MenuService {
       System.out.println(ex.getMessage());
       return Collections.emptyList();
     }
+  }
+
+  public Match getInitialMatchObject(User firstPlayer, String fingerprint) {
+    Match newMatch = new Match();
+    newMatch.setFirstPlayer(firstPlayer);
+    newMatch.setStatus(MatchStatus.WAITING_PLAYER);
+    Integer firstPlayerPits[] = new Integer[] { 6, 6, 6, 6, 6, 6, 0 };
+    Integer secondPlayerPits[] = new Integer[] { 6, 6, 6, 6, 6, 6, 0 };
+    newMatch.setFirstPlayerPits(firstPlayerPits);
+    newMatch.setSecondPlayerPits(secondPlayerPits);
+    newMatch.setPlayerTurn(firstPlayer);
+
+    return newMatch;
   }
 }

@@ -26,11 +26,18 @@ export class MatchComponent implements OnInit {
     this.stompClient = this.matchService.getStompClient();
     this.stompClient.connect({}, (frame) => {
       this.listenJoin();
+      this.listenPlay();
     });
   }
 
   listenJoin() {
     this.stompClient.subscribe('/match/join', (outputMessage: OutputMessage) => {
+      this.match = outputMessage.match;
+    });
+  }
+
+  listenPlay() {
+    this.stompClient.subscribe('/match/play', (outputMessage: OutputMessage) => {
       this.match = outputMessage.match;
     });
   }
@@ -44,7 +51,8 @@ export class MatchComponent implements OnInit {
     message.type = MessageStatus.PLAY;
     message.playerId = localStorage.getItem('playerId');
     message.fingerprint = await this.getWorkstationFingerprint();
-    message.match = this.match;
+
+    this.matchService.sendPlayMessage(this.stompClient, message);
   }
 
   async getWorkstationFingerprint() {

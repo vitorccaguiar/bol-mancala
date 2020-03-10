@@ -10,6 +10,7 @@ public class Match {
   private String status;
   private Integer[] firstPlayerPits;
   private Integer[] secondPlayerPits;
+  private User playerTurn;
   private String winner;
 
   public String getId() {
@@ -84,6 +85,20 @@ public class Match {
    */
   public void setSecondPlayerPits(Integer[] secondPlayerPits) {
     this.secondPlayerPits = secondPlayerPits;
+  }
+
+  /**
+   * @return the playerIdTurn
+   */
+  public User getPlayerTurn() {
+    return playerTurn;
+  }
+
+  /**
+   * @param playerIdTurn the playerIdTurn to set
+   */
+  public void setPlayerTurn(User playerTurn) {
+    this.playerTurn = playerTurn;
   }
 
   /**

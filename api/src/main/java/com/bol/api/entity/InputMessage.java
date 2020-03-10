@@ -4,6 +4,8 @@ public class InputMessage {
     private String type;
     private String playerId;
     private String fingerprint;
+    private Match match;
+    private Play play;
 
     /**
      * @return the type
@@ -45,5 +47,38 @@ public class InputMessage {
      */
     public void setFingerprint(String fingerprint) {
         this.fingerprint = fingerprint;
+    }
+
+    /**
+     * @return the match
+     */
+    public Match getMatch() {
+        return match;
+    }
+
+    /**
+     * @param match the match to set
+     */
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+
+    /**
+     * @return the play
+     */
+    public Play getPlay() {
+        return play;
+    }
+
+    /**
+     * @param play the play to set
+     */
+    public void setPlay(Play play) {
+        this.play = play;
+    }
+
+    @Override
+    public String toString() {
+        return "type: " + getType() + " playerId: " + getPlayerId() + " fingerprint: " + getFingerprint();
     }
 }
