@@ -13,11 +13,16 @@ import { MessageStatus } from '../objects/message-status';
 })
 export class ListItemComponent implements OnInit {
   @Input() match: Match;
+  private stompClient: any;
 
   constructor(private router: Router,
               private matchService: MatchService) { }
 
   ngOnInit() {
+    this.stompClient = this.matchService.getStompClient();
+    this.stompClient.connect({}, (frame) => {
+      
+    });
   }
 
   async joinGame() {
@@ -27,7 +32,7 @@ export class ListItemComponent implements OnInit {
     message.fingerprint = await this.getWorkstationFingerprint();
     message.match = this.match;
 
-    this.matchService.sendJoinMessage(message);
+    this.matchService.sendJoinMessage(this.stompClient, message);
     localStorage.setItem('matchId', this.match.id);
     this.router.navigate(['match']);
   }

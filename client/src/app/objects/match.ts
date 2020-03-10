@@ -1,9 +1,12 @@
+import { User } from './user';
+
 export class Match {
   id: string;
-  firstPlayerName: string;
-  secondPlayerName: string;
+  firstPlayer: User;
+  secondPlayer: User;
   status: string;
   firstPlayerPits: number[];
   secondPlayerPits: number[];
+  playerTurn: User;
   winner: string;
 }

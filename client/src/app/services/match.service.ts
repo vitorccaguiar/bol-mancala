@@ -3,40 +3,39 @@ import { BaseService } from './base.service';
 import { environment } from '../../environments/environment';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
-import { OutputMessage } from '../objects/output-message';
 import { InputMessage } from '../objects/input-message';
+import { Match } from '../objects/match';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MatchService extends BaseService {
-  private stompClient: any;
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
     super();
-    this.connect();
   }
 
-  connect() {
+  getStompClient(): any {
     const socket = new SockJS(environment.websocketUrl);
-    this.stompClient = Stomp.over(socket);
-    this.stompClient.connect({}, (frame) => {
-        console.log('Connected: ' + frame);
-        this.stompClient.subscribe('/match/join', (outputMessage: OutputMessage) => {
-          console.log('Returned message');
-          console.log(outputMessage);
-        });
-    });
+    return Stomp.over(socket);
   }
 
-  disconnect() {
-      if (this.stompClient !== null) {
-          this.stompClient.disconnect();
-      }
-      console.log('Disconnected');
+  // disconnect() {
+  //     if (this.stompClient !== null) {
+  //         this.stompClient.disconnect();
+  //     }
+  //     console.log('Disconnected');
+  // }
+
+  sendJoinMessage(stompClient: any, message: InputMessage): void {
+      stompClient.send('/app/join', {}, JSON.stringify(message));
   }
 
-  sendJoinMessage(message: InputMessage) {
-      this.stompClient.send('/app/join', {}, JSON.stringify(message));
+  getMatchById(matchId: string): Promise<any> {
+    return this.httpClient.get<any>(
+      `${environment.apiUrl}/match/?matchId=${matchId}`,
+      this.getHeaders(),
+    ).toPromise();
   }
 }
