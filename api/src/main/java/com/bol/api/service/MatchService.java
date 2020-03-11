@@ -17,6 +17,7 @@ import com.bol.api.repository.MatchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,7 +48,7 @@ public class MatchService {
       Optional<User> player = userService.getUserById(message.getPlayerId());
       if (player.isPresent()) {
         Optional<Match> match = this.matchRepository.findById(message.getMatchId());
-        if (match.isPresent()) {
+        if (match.isPresent() && match.get().getStatus().equals(MatchStatus.WAITING_PLAYER)) {
           match.get().setSecondPlayer(player.get());
           match.get().setStatus(MatchStatus.PLAYING);
           matchRepository.save(match.get());
@@ -67,18 +68,19 @@ public class MatchService {
 
   public OutputMessage play(InputMessage message) {
     try {
-      if (isPlayerTurn(message.getPlayerId())) {
+      if (isPlayerTurn(message.getPlayerId()) && isMatchOnGoing(message.getMatchId())) {
         if (isPlayerMatch(message.getPlayerId(), message.getFingerprint(), message.getMatchId())) {
           Match match = matchRepository.findById(message.getMatchId()).get();
-          Integer lastPosition = doPlay(match.getId(), message.getPlayPosition());
+          Pair<Integer, Integer> finishedPositionAndPit = doPlay(match, message.getPlayPosition());
           if (isEndGame(match)) {
             match.setStatus(MatchStatus.FINISHED);
             setWinner(match);
             matchRepository.save(match);
+            cleanCache(match);
             return new OutputMessage(MessageStatus.FINISHED, match);
           }
-          handleLastStoneEmptyPit(match, lastPosition);
-          if (!isLastStoneBigPit(lastPosition)) {
+          handleLastStoneEmptyPit(match, finishedPositionAndPit);
+          if (!isLastStoneBigPit(finishedPositionAndPit.getFirst())) {
             changePlayerTurn(match);
           }
           matchRepository.save(match);
@@ -109,6 +111,11 @@ public class MatchService {
     return false;
   }
 
+  public Boolean isMatchOnGoing(String matchId) {
+    Match match = matchRepository.findById(matchId).get();
+    return match.getStatus().equals(MatchStatus.PLAYING);
+  }
+
   public Boolean isPlayerMatch(String playerId, String fingerprint, String matchId) {
     String realMatchId = playerMatch.get(playerId);
     String realFingerprint = playerMachine.get(playerId);
@@ -119,24 +126,30 @@ public class MatchService {
     }
   }
 
-  public void handleLastStoneEmptyPit(Match match, Integer lastPosition) {
+  public void handleLastStoneEmptyPit(Match match, Pair<Integer, Integer> finishedPositionAndPit) {
     String playerTurnId = match.getPlayerTurn().getId();
     Integer[] firstPlayerPits = match.getFirstPlayerPits();
     Integer[] secondPlayerPits = match.getSecondPlayerPits();
+    Integer finishedPosition = finishedPositionAndPit.getFirst();
+    Integer finishedPit = finishedPositionAndPit.getSecond();
 
     if (playerTurnId.equals(match.getFirstPlayer().getId())) {
-      if (firstPlayerPits[lastPosition].equals(0)) {
-        firstPlayerPits[6] += firstPlayerPits[lastPosition] + secondPlayerPits[lastPosition];
+      if (finishedPit.equals(1) && firstPlayerPits[finishedPosition].equals(0)) {
+        firstPlayerPits[6] += firstPlayerPits[finishedPosition] + secondPlayerPits[finishedPosition];
+        firstPlayerPits[finishedPosition] = 0;
+        secondPlayerPits[finishedPosition] = 0;
+        match.setFirstPlayerPits(firstPlayerPits);
+        match.setSecondPlayerPits(secondPlayerPits);
       }
-    } else if (playerTurnId.equals(match.getSecondPlayer().getId())) {
-      if (match.getSecondPlayerPits()[lastPosition].equals(0)) {
-        secondPlayerPits[6] += firstPlayerPits[lastPosition] + secondPlayerPits[lastPosition];
+    } else if (finishedPit.equals(2) && playerTurnId.equals(match.getSecondPlayer().getId())) {
+      if (match.getSecondPlayerPits()[finishedPosition].equals(0)) {
+        secondPlayerPits[6] += firstPlayerPits[finishedPosition] + secondPlayerPits[finishedPosition];
+        firstPlayerPits[finishedPosition] = 0;
+        secondPlayerPits[finishedPosition] = 0;
+        match.setFirstPlayerPits(firstPlayerPits);
+        match.setSecondPlayerPits(secondPlayerPits);
       }
     }
-    firstPlayerPits[lastPosition] = 0;
-    secondPlayerPits[lastPosition] = 0;
-    match.setFirstPlayerPits(firstPlayerPits);
-    match.setSecondPlayerPits(secondPlayerPits);
   }
 
   public Boolean isLastStoneBigPit(Integer lastPosition) {
@@ -151,31 +164,35 @@ public class MatchService {
     }
   }
 
-  public Integer doPlay(String matchId, Integer playPosition) {
-    Optional<Match> result = matchRepository.findById(matchId);
-    if (result.isPresent()) {
-      Match match = result.get();
-      String firstPlayerId = match.getFirstPlayer().getId();
-      String secondPlayerId = match.getSecondPlayer().getId();
-      String playerTurnId = match.getPlayerTurn().getId();
-
-      if (playerTurnId.equals(firstPlayerId)) {
-        return firstPlayerPlay(match, playPosition);
-      } else if (playerTurnId.equals(secondPlayerId)) {
-        return secondPlayerPlay(match, playPosition);
-      }
-    }
-
-    return null;
+  public void cleanCache(Match match) {
+    playerMatch.remove(match.getFirstPlayer().getId());
+    playerMatch.remove(match.getSecondPlayer().getId());
+    playerMachine.remove(match.getFirstPlayer().getId());
+    playerMachine.remove(match.getSecondPlayer().getId());
   }
 
-  public Integer firstPlayerPlay(Match match, Integer playPosition) {
+  public Pair<Integer, Integer> doPlay(Match match, Integer playPosition) {
+    String firstPlayerId = match.getFirstPlayer().getId();
+    String secondPlayerId = match.getSecondPlayer().getId();
+    String playerTurnId = match.getPlayerTurn().getId();
+
+    if (playerTurnId.equals(firstPlayerId)) {
+      return firstPlayerPlay(match, playPosition);
+    } else if (playerTurnId.equals(secondPlayerId)) {
+      return secondPlayerPlay(match, playPosition);
+    }
+
+    return Pair.of(null, null);
+  }
+
+  public Pair<Integer, Integer> firstPlayerPlay(Match match, Integer playPosition) {
     Integer[] firstPlayerPits = match.getFirstPlayerPits();
     Integer[] secondPlayerPits = match.getSecondPlayerPits();
     Integer numberOfStones = firstPlayerPits[playPosition];
     firstPlayerPits[playPosition] = 0;
 
-    Integer lastPosition = 0;
+    Integer finishedPosition = 0;
+    Integer finishedPit = -1;
     Integer moves = 0;
     while (!moves.equals(numberOfStones)) {
       Integer index = moves == 0 ? playPosition + 1 : 0;
@@ -183,28 +200,33 @@ public class MatchService {
         firstPlayerPits[i]++;
         moves++;
         if (moves.equals(numberOfStones)) {
-          lastPosition = i;
+          finishedPosition = i;
+          finishedPit = 1;
+          break;
         }
       }
-      for (int i = 0; i < secondPlayerPits.length; i++) {
+      for (int i = 0; i < secondPlayerPits.length - 1; i++) {
         secondPlayerPits[i]++;
         moves++;
         if (moves.equals(numberOfStones)) {
-          lastPosition = i;
+          finishedPosition = i;
+          finishedPit = 2;
+          break;
         }
       }
     }
 
-    return lastPosition;
+    return Pair.of(finishedPosition, finishedPit);
   }
 
-  public Integer secondPlayerPlay(Match match, Integer playPosition) {
+  public Pair<Integer, Integer> secondPlayerPlay(Match match, Integer playPosition) {
     Integer[] firstPlayerPits = match.getFirstPlayerPits();
     Integer[] secondPlayerPits = match.getSecondPlayerPits();
     Integer numberOfStones = secondPlayerPits[playPosition];
     secondPlayerPits[playPosition] = 0;
 
-    Integer lastPosition = 0;
+    Integer finishedPosition = 0;
+    Integer finishedPit = -1;
     Integer moves = 0;
     while (!moves.equals(numberOfStones)) {
       Integer index = moves == 0 ? playPosition + 1 : 0;
@@ -212,19 +234,23 @@ public class MatchService {
         secondPlayerPits[i]++;
         moves++;
         if (moves.equals(numberOfStones)) {
-          lastPosition = i;
+          finishedPosition = i;
+          finishedPit = 2;
+          break;
         }
       }
-      for (int i = 0; i < firstPlayerPits.length; i++) {
+      for (int i = 0; i < firstPlayerPits.length - 1; i++) {
         firstPlayerPits[i]++;
         moves++;
         if (moves.equals(numberOfStones)) {
-          lastPosition = i;
+          finishedPosition = i;
+          finishedPit = 1;
+          break;
         }
       }
     }
 
-    return lastPosition;
+    return Pair.of(finishedPosition, finishedPit);
   }
 
   public Boolean isEndGame(Match match) {

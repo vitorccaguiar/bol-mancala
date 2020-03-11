@@ -20,17 +20,14 @@ export class ListItemComponent implements OnInit {
 
   ngOnInit() {
     this.stompClient = this.matchService.getStompClient();
-    this.stompClient.connect({}, (frame) => {
-      
-    });
   }
 
   async joinGame() {
     const message = new InputMessage();
     message.type = MessageStatus.JOIN;
     message.playerId = localStorage.getItem('playerId');
+    message.matchId = this.match.id;
     message.fingerprint = await this.getWorkstationFingerprint();
-    message.match = this.match;
 
     this.matchService.sendJoinMessage(this.stompClient, message);
     localStorage.setItem('matchId', this.match.id);

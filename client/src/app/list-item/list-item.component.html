@@ -1,12 +1,12 @@
 <mat-card class="mainCard">
   <div class="item">
-    <strong>Player 1: </strong><span>{{match.firstPlayer.name}}</span>
+    <strong>Player 1: </strong><span>{{ match?.firstPlayer?.name }}</span>
   </div>
   <div class="item">
-    <strong>Player 2: </strong><span>{{match.secondPlayer.name}}</span>
+    <strong>Player 2: </strong><span>{{ match?.secondPlayer?.name }}</span>
   </div>
   <div class="item">
-    <strong>Status: </strong><span>{{match.status}}</span>
+    <strong>Status: </strong><span>{{ match?.status }}</span>
   </div>
   <div class="item" *ngIf="match.status !== 'Playing'">
     <button mat-raised-button color="primary" (click)="joinGame()">Join</button>

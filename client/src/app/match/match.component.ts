@@ -6,6 +6,7 @@ import { MatchService } from '../services/match.service';
 import { OutputMessage } from '../objects/output-message';
 import { InputMessage } from '../objects/input-message';
 import { MessageStatus } from '../objects/message-status';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-match',
@@ -17,7 +18,8 @@ export class MatchComponent implements OnInit {
   match: Match = new Match();
 
   constructor(private router: Router,
-              private matchService: MatchService) { }
+              private matchService: MatchService,
+              private snackbar: MatSnackBar) { }
 
   async ngOnInit() {
     this.match.id = localStorage.getItem('matchId');
@@ -31,14 +33,37 @@ export class MatchComponent implements OnInit {
   }
 
   listenJoin() {
-    this.stompClient.subscribe('/match/join', (outputMessage: OutputMessage) => {
-      this.match = outputMessage.match;
+    this.stompClient.subscribe('/match/join', (socketResult: any) => {
+      const outputMessage = JSON.parse(socketResult.body) as OutputMessage;
+      if (outputMessage.type === MessageStatus.ERROR) {
+        this.snackbar.open('Error while player join the match!', 'Close', {
+          duration: 3000
+        });
+      } else {
+        this.match = outputMessage.match;
+      }
     });
   }
 
   listenPlay() {
-    this.stompClient.subscribe('/match/play', (outputMessage: OutputMessage) => {
-      this.match = outputMessage.match;
+    this.stompClient.subscribe('/match/play', (socketResult: any) => {
+      const outputMessage = JSON.parse(socketResult.body) as OutputMessage;
+      if (outputMessage.type === MessageStatus.ERROR) {
+        this.snackbar.open('Error with the play!', 'Close', {
+          duration: 3000
+        });
+      } else {
+        this.match = outputMessage.match;
+        if (outputMessage.type === MessageStatus.FINISHED) {
+          this.snackbar.open(outputMessage.match.winner + ' is the winner!', 'Close', {
+            duration: 10000
+          });
+        } else if (outputMessage.type === MessageStatus.PLAYING) {
+          this.snackbar.open(outputMessage.match.playerTurn.name + ' turn!', 'Close', {
+            duration: 3000
+          });
+        }
+      }
     });
   }
 
@@ -46,11 +71,13 @@ export class MatchComponent implements OnInit {
     this.router.navigate(['menu']);
   }
 
-  async play(position: number): Promise<void> {
+  async play(playPosition: number): Promise<void> {
     const message = new InputMessage();
     message.type = MessageStatus.PLAY;
     message.playerId = localStorage.getItem('playerId');
+    message.matchId = localStorage.getItem('matchId');
     message.fingerprint = await this.getWorkstationFingerprint();
+    message.playPosition = playPosition;
 
     this.matchService.sendPlayMessage(this.stompClient, message);
   }
