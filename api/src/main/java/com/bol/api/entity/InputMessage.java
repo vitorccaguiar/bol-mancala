@@ -3,9 +3,9 @@ package com.bol.api.entity;
 public class InputMessage {
     private String type;
     private String playerId;
+    private String matchId;
     private String fingerprint;
-    private Match match;
-    private Play play;
+    private Integer playPosition;
 
     /**
      * @return the type
@@ -36,6 +36,20 @@ public class InputMessage {
     }
 
     /**
+     * @return the matchId
+     */
+    public String getMatchId() {
+        return matchId;
+    }
+
+    /**
+     * @param matchId the matchId to set
+     */
+    public void setMatchId(String matchId) {
+        this.matchId = matchId;
+    }
+
+    /**
      * @return the fingerprint
      */
     public String getFingerprint() {
@@ -50,31 +64,17 @@ public class InputMessage {
     }
 
     /**
-     * @return the match
+     * @return the playPosition
      */
-    public Match getMatch() {
-        return match;
+    public Integer getPlayPosition() {
+        return playPosition;
     }
 
     /**
-     * @param match the match to set
+     * @param playPosition the playPosition to set
      */
-    public void setMatch(Match match) {
-        this.match = match;
-    }
-
-    /**
-     * @return the play
-     */
-    public Play getPlay() {
-        return play;
-    }
-
-    /**
-     * @param play the play to set
-     */
-    public void setPlay(Play play) {
-        this.play = play;
+    public void setPlayPosition(Integer playPosition) {
+        this.playPosition = playPosition;
     }
 
     @Override
