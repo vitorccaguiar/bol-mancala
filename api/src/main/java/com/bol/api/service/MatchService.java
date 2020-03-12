@@ -257,7 +257,8 @@ public class MatchService {
     Stream<Integer> firstPlayerPits = Arrays.stream(match.getFirstPlayerPits());
     Stream<Integer> secondPlayerPits = Arrays.stream(match.getSecondPlayerPits());
 
-    return firstPlayerPits.allMatch(n -> n == 0) || secondPlayerPits.allMatch(n -> n == 0);
+    return firstPlayerPits.limit(6).allMatch(n -> n == 0) ||
+      secondPlayerPits.limit(6).allMatch(n -> n == 0);
   }
 
   public void setWinner(Match match) {
