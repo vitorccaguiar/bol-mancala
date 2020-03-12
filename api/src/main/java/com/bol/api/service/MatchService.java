@@ -134,18 +134,18 @@ public class MatchService {
     Integer finishedPit = finishedPositionAndPit.getSecond();
 
     if (playerTurnId.equals(match.getFirstPlayer().getId())) {
-      if (finishedPit.equals(1) && firstPlayerPits[finishedPosition].equals(0)) {
-        firstPlayerPits[6] += firstPlayerPits[finishedPosition] + secondPlayerPits[finishedPosition];
+      if (finishedPit.equals(1) && firstPlayerPits[finishedPosition].equals(1)) {
+        firstPlayerPits[6] += firstPlayerPits[finishedPosition] + secondPlayerPits[5 - finishedPosition];
         firstPlayerPits[finishedPosition] = 0;
-        secondPlayerPits[finishedPosition] = 0;
+        secondPlayerPits[5 - finishedPosition] = 0;
         match.setFirstPlayerPits(firstPlayerPits);
         match.setSecondPlayerPits(secondPlayerPits);
       }
     } else if (finishedPit.equals(2) && playerTurnId.equals(match.getSecondPlayer().getId())) {
-      if (match.getSecondPlayerPits()[finishedPosition].equals(0)) {
-        secondPlayerPits[6] += firstPlayerPits[finishedPosition] + secondPlayerPits[finishedPosition];
-        firstPlayerPits[finishedPosition] = 0;
+      if (match.getSecondPlayerPits()[finishedPosition].equals(1)) {
+        secondPlayerPits[6] += secondPlayerPits[finishedPosition] + firstPlayerPits[5 - finishedPosition];
         secondPlayerPits[finishedPosition] = 0;
+        firstPlayerPits[5 - finishedPosition] = 0;
         match.setFirstPlayerPits(firstPlayerPits);
         match.setSecondPlayerPits(secondPlayerPits);
       }
@@ -202,7 +202,7 @@ public class MatchService {
         if (moves.equals(numberOfStones)) {
           finishedPosition = i;
           finishedPit = 1;
-          break;
+          return Pair.of(finishedPosition, finishedPit);
         }
       }
       for (int i = 0; i < secondPlayerPits.length - 1; i++) {
@@ -211,7 +211,7 @@ public class MatchService {
         if (moves.equals(numberOfStones)) {
           finishedPosition = i;
           finishedPit = 2;
-          break;
+          return Pair.of(finishedPosition, finishedPit);
         }
       }
     }
@@ -236,7 +236,7 @@ public class MatchService {
         if (moves.equals(numberOfStones)) {
           finishedPosition = i;
           finishedPit = 2;
-          break;
+          return Pair.of(finishedPosition, finishedPit);
         }
       }
       for (int i = 0; i < firstPlayerPits.length - 1; i++) {
@@ -245,7 +245,7 @@ public class MatchService {
         if (moves.equals(numberOfStones)) {
           finishedPosition = i;
           finishedPit = 1;
-          break;
+          return Pair.of(finishedPosition, finishedPit);
         }
       }
     }
