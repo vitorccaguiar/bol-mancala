@@ -177,27 +177,25 @@ public class MatchService {
     String playerTurnId = match.getPlayerTurn().getId();
 
     if (playerTurnId.equals(firstPlayerId)) {
-      return firstPlayerPlay(match, playPosition);
+      return doPlay(match.getFirstPlayerPits(), match.getSecondPlayerPits(), playPosition);
     } else if (playerTurnId.equals(secondPlayerId)) {
-      return secondPlayerPlay(match, playPosition);
+      return doPlay(match.getSecondPlayerPits(), match.getFirstPlayerPits(), playPosition);
     }
 
     return Pair.of(null, null);
   }
 
-  public Pair<Integer, Integer> firstPlayerPlay(Match match, Integer playPosition) {
-    Integer[] firstPlayerPits = match.getFirstPlayerPits();
-    Integer[] secondPlayerPits = match.getSecondPlayerPits();
-    Integer numberOfStones = firstPlayerPits[playPosition];
-    firstPlayerPits[playPosition] = 0;
+  public Pair<Integer, Integer> doPlay(Integer[] firstPit, Integer[] secondPit, Integer playPosition) {
+    Integer numberOfStones = firstPit[playPosition];
+    firstPit[playPosition] = 0;
 
     Integer finishedPosition = 0;
     Integer finishedPit = -1;
     Integer moves = 0;
     while (!moves.equals(numberOfStones)) {
       Integer index = moves == 0 ? playPosition + 1 : 0;
-      for (Integer i = index; i < firstPlayerPits.length; i++) {
-        firstPlayerPits[i]++;
+      for (Integer i = index; i < firstPit.length; i++) {
+        firstPit[i]++;
         moves++;
         if (moves.equals(numberOfStones)) {
           finishedPosition = i;
@@ -205,46 +203,12 @@ public class MatchService {
           return Pair.of(finishedPosition, finishedPit);
         }
       }
-      for (int i = 0; i < secondPlayerPits.length - 1; i++) {
-        secondPlayerPits[i]++;
+      for (int i = 0; i < secondPit.length - 1; i++) {
+        secondPit[i]++;
         moves++;
         if (moves.equals(numberOfStones)) {
           finishedPosition = i;
           finishedPit = 2;
-          return Pair.of(finishedPosition, finishedPit);
-        }
-      }
-    }
-
-    return Pair.of(finishedPosition, finishedPit);
-  }
-
-  public Pair<Integer, Integer> secondPlayerPlay(Match match, Integer playPosition) {
-    Integer[] firstPlayerPits = match.getFirstPlayerPits();
-    Integer[] secondPlayerPits = match.getSecondPlayerPits();
-    Integer numberOfStones = secondPlayerPits[playPosition];
-    secondPlayerPits[playPosition] = 0;
-
-    Integer finishedPosition = 0;
-    Integer finishedPit = -1;
-    Integer moves = 0;
-    while (!moves.equals(numberOfStones)) {
-      Integer index = moves == 0 ? playPosition + 1 : 0;
-      for (Integer i = index; i < secondPlayerPits.length; i++) {
-        secondPlayerPits[i]++;
-        moves++;
-        if (moves.equals(numberOfStones)) {
-          finishedPosition = i;
-          finishedPit = 2;
-          return Pair.of(finishedPosition, finishedPit);
-        }
-      }
-      for (int i = 0; i < firstPlayerPits.length - 1; i++) {
-        firstPlayerPits[i]++;
-        moves++;
-        if (moves.equals(numberOfStones)) {
-          finishedPosition = i;
-          finishedPit = 1;
           return Pair.of(finishedPosition, finishedPit);
         }
       }
