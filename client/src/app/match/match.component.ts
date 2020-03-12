@@ -57,9 +57,15 @@ export class MatchComponent implements OnInit {
       } else {
         this.match = outputMessage.match;
         if (outputMessage.type === MessageStatus.FINISHED) {
-          this.snackbar.open(outputMessage.match.winner + ' is the winner!', 'Close', {
-            duration: 10000
-          });
+          if (outputMessage.match.tie) {
+            this.snackbar.open('No winners, it was a tie!', 'Close', {
+              duration: 10000
+            });
+          } else {
+            this.snackbar.open(outputMessage.match.winner + ' is the winner!', 'Close', {
+              duration: 10000
+            });
+          }
         } else if (outputMessage.type === MessageStatus.PLAYING) {
           this.snackbar.open(outputMessage.match.playerTurn.name + ' turn!', 'Close', {
             duration: 3000

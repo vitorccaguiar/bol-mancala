@@ -12,6 +12,7 @@ public class Match {
   private Integer[] secondPlayerPits;
   private User playerTurn;
   private String winner;
+  private Boolean tie;
 
   public String getId() {
     return this.id;
@@ -113,6 +114,20 @@ public class Match {
    */
   public void setWinner(String winner) {
     this.winner = winner;
+  }
+
+  /**
+   * @return the tie
+   */
+  public Boolean getTie() {
+    return tie;
+  }
+
+  /**
+   * @param tie the tie to set
+   */
+  public void setTie(Boolean tie) {
+    this.tie = tie;
   }
 
 }

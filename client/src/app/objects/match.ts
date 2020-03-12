@@ -9,4 +9,5 @@ export class Match {
   secondPlayerPits: number[];
   playerTurn: User;
   winner: string;
+  tie: boolean;
 }

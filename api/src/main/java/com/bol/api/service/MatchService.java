@@ -231,8 +231,10 @@ public class MatchService {
 
     if (firstPlayerBigPit > secondPlayerBigPit) {
       match.setWinner(match.getFirstPlayer().getName());
-    } else {
+    } else if (secondPlayerBigPit > firstPlayerBigPit) {
       match.setWinner(match.getSecondPlayer().getName());
+    } else {
+      match.setTie(true);
     }
   }
 
