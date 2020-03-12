@@ -16,12 +16,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class MatchComponent implements OnInit {
   private stompClient: any;
   match: Match = new Match();
+  playerId: string;
 
   constructor(private router: Router,
               private matchService: MatchService,
               private snackbar: MatSnackBar) { }
 
   async ngOnInit() {
+    this.playerId = localStorage.getItem('playerId');
     this.match.id = localStorage.getItem('matchId');
     const result = await this.matchService.getMatchById(this.match.id);
     this.match = JSON.parse(result) as Match;
