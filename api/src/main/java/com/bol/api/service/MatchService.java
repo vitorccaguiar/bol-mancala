@@ -39,8 +39,8 @@ public class MatchService {
     } else if (message.getType().equals(MessageStatus.PLAY)) {
       return play(message);
     }
-    logger.error(MessageStatus.ERROR + "{}", "Mensagem");
-    return new OutputMessage(MessageStatus.ERROR, null);
+    logger.error(MessageStatus.ERROR + " {}", "No message type found");
+    return new OutputMessage(MessageStatus.ERROR, null, "Invalid action");
   }
 
   public OutputMessage join(InputMessage message) {
@@ -55,14 +55,17 @@ public class MatchService {
   
           playerMatch.put(message.getPlayerId(), match.get().getId());
           playerMachine.put(message.getPlayerId(), message.getFingerprint());
-          return new OutputMessage(MessageStatus.READY, match.get());
+          logger.info(MessageStatus.PLAYING + " {}", "Second player joined in the match");
+          return new OutputMessage(MessageStatus.READY, match.get(), "Second player joined in the match");
         }
-        return new OutputMessage(MessageStatus.ERROR, null);
+        logger.error(MessageStatus.ERROR + " {}", "Invalid match");
+        return new OutputMessage(MessageStatus.ERROR, null, "Invalid match");
       }
-      return new OutputMessage(MessageStatus.ERROR, null);
+      logger.error(MessageStatus.ERROR + " {}", "Player not found");
+      return new OutputMessage(MessageStatus.ERROR, null, "Player not found");
     } catch (Exception ex) {
       logger.error(ex.getMessage());
-      return new OutputMessage(MessageStatus.ERROR, null);
+      return new OutputMessage(MessageStatus.ERROR, null, "Unexpected error occurred while joining the match");
     }
   }
 
@@ -77,24 +80,26 @@ public class MatchService {
             setWinner(match);
             matchRepository.save(match);
             cleanCache(match);
-            return new OutputMessage(MessageStatus.FINISHED, match);
+            logger.info(MessageStatus.FINISHED + " {}", "The match is over");
+            return new OutputMessage(MessageStatus.FINISHED, match, "The match is over");
           }
           handleLastStoneEmptyPit(match, finishedPositionAndPit);
           if (!isLastStoneBigPit(finishedPositionAndPit.getFirst())) {
             changePlayerTurn(match);
           }
           matchRepository.save(match);
-          logger.info(MessageStatus.PLAYING + "{}", match);
-          return new OutputMessage(MessageStatus.PLAYING, match);
+          logger.info(MessageStatus.PLAYING + " {}", match);
+          return new OutputMessage(MessageStatus.PLAYING, match, "Next turn");
         }
-        logger.error(MessageStatus.ERROR + "{}", "Mensagem");
-        return new OutputMessage(MessageStatus.ERROR, null);
+        logger.error(MessageStatus.ERROR + " {}", "Is not " + message.getMatchId() + " match");
+        return new OutputMessage(MessageStatus.ERROR, null, "");
       }
-      logger.error(MessageStatus.ERROR + "{}", "Mensagem");
-      return new OutputMessage(MessageStatus.ERROR, null);
+      String playerName = userService.getUserById(message.getPlayerId()).get().getName();
+      logger.error(MessageStatus.ERROR + " {}", "Is not " + playerName + " turn");
+      return new OutputMessage(MessageStatus.ERROR, null, "Is not " + playerName + "'s turn");
     } catch (Exception ex) {
       logger.error(ex.getMessage());
-      return new OutputMessage(MessageStatus.ERROR, null);
+      return new OutputMessage(MessageStatus.ERROR, null, "Unexpected error occurred while trying to play");
     }
   }
 

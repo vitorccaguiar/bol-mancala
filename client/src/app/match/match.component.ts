@@ -52,8 +52,8 @@ export class MatchComponent implements OnInit {
     this.stompClient.subscribe('/match/play', (socketResult: any) => {
       const outputMessage = JSON.parse(socketResult.body) as OutputMessage;
       if (outputMessage.type === MessageStatus.ERROR) {
-        this.snackbar.open('Error with the play!', 'Close', {
-          duration: 3000
+        this.snackbar.open(outputMessage.errorMessage, 'Close', {
+          duration: 5000
         });
       } else {
         this.match = outputMessage.match;
@@ -80,15 +80,21 @@ export class MatchComponent implements OnInit {
     this.router.navigate(['menu']);
   }
 
-  async play(playPosition: number): Promise<void> {
-    const message = new InputMessage();
-    message.type = MessageStatus.PLAY;
-    message.playerId = localStorage.getItem('playerId');
-    message.matchId = localStorage.getItem('matchId');
-    message.fingerprint = await this.getWorkstationFingerprint();
-    message.playPosition = playPosition;
-
-    this.matchService.sendPlayMessage(this.stompClient, message);
+  async play(playPosition: number, boardSide: number): Promise<void> {
+    if (boardSide === 1) {
+      const message = new InputMessage();
+      message.type = MessageStatus.PLAY;
+      message.playerId = localStorage.getItem('playerId');
+      message.matchId = localStorage.getItem('matchId');
+      message.fingerprint = await this.getWorkstationFingerprint();
+      message.playPosition = playPosition;
+  
+      this.matchService.sendPlayMessage(this.stompClient, message);
+    } else {
+      this.snackbar.open('That is not your side on the board!', 'Close', {
+        duration: 3000
+      });
+    }
   }
 
   async getWorkstationFingerprint() {
