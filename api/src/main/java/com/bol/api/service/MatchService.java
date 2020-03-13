@@ -177,15 +177,15 @@ public class MatchService {
     String playerTurnId = match.getPlayerTurn().getId();
 
     if (playerTurnId.equals(firstPlayerId)) {
-      return doPlay(match.getFirstPlayerPits(), match.getSecondPlayerPits(), playPosition);
+      return doPlay(match.getFirstPlayerPits(), match.getSecondPlayerPits(), playPosition, true);
     } else if (playerTurnId.equals(secondPlayerId)) {
-      return doPlay(match.getSecondPlayerPits(), match.getFirstPlayerPits(), playPosition);
+      return doPlay(match.getSecondPlayerPits(), match.getFirstPlayerPits(), playPosition, false);
     }
 
     return Pair.of(null, null);
   }
 
-  public Pair<Integer, Integer> doPlay(Integer[] firstPit, Integer[] secondPit, Integer playPosition) {
+  public Pair<Integer, Integer> doPlay(Integer[] firstPit, Integer[] secondPit, Integer playPosition, Boolean firstPlayer) {
     Integer numberOfStones = firstPit[playPosition];
     firstPit[playPosition] = 0;
 
@@ -199,7 +199,7 @@ public class MatchService {
         moves++;
         if (moves.equals(numberOfStones)) {
           finishedPosition = i;
-          finishedPit = 1;
+          finishedPit = firstPlayer.equals(true) ? 1 : 2;
           return Pair.of(finishedPosition, finishedPit);
         }
       }
@@ -208,7 +208,7 @@ public class MatchService {
         moves++;
         if (moves.equals(numberOfStones)) {
           finishedPosition = i;
-          finishedPit = 2;
+          finishedPit = firstPlayer.equals(true) ? 2 : 1;
           return Pair.of(finishedPosition, finishedPit);
         }
       }

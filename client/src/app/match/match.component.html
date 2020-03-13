@@ -63,5 +63,8 @@
     </mat-card>
     <p class="playerName"> {{ playerId === match?.firstPlayer?.id ? match?.firstPlayer?.name : match?.secondPlayer?.name }} </p>
   </div>
+  <div class="winner" *ngIf="match?.status === 'finished'">
+    <strong>{{ match?.winner + ' won!' }}</strong>
+  </div>
   <button mat-raised-button class="menuButton" color="warn" (click)="leave()">Leave Game</button>
 </mat-card>

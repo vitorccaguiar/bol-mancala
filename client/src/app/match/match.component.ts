@@ -27,6 +27,7 @@ export class MatchComponent implements OnInit {
     this.match.id = localStorage.getItem('matchId');
     const result = await this.matchService.getMatchById(this.match.id);
     this.match = JSON.parse(result) as Match;
+    console.log(this.match);
     this.stompClient = this.matchService.getStompClient();
     this.stompClient.connect({}, (frame) => {
       this.listenJoin();

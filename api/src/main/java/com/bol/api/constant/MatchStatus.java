@@ -1,7 +1,7 @@
 package com.bol.api.constant;
 
 public class MatchStatus {
-    public static final String WAITING_PLAYER = "Waiting player";
-    public static final String PLAYING = "Playing";
-    public static final String FINISHED = "Finished";
+    public static final String WAITING_PLAYER = "waiting player";
+    public static final String PLAYING = "playing";
+    public static final String FINISHED = "finished";
 }
