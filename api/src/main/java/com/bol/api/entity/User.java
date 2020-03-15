@@ -43,7 +43,7 @@ public class User {
     }
 
     User guest = (User) obj;
-    return id.equals(guest.getId()) &&
-        name.equals(guest.getName());
+    return ((id == null && guest.getId() == null) || id.equals(guest.getId())) &&
+        ((name == null && guest.getName() == null) || name.equals(guest.getName()));
   }
 }

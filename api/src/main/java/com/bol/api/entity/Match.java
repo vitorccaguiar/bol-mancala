@@ -1,5 +1,7 @@
 package com.bol.api.entity;
 
+import java.util.Arrays;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Matches")
@@ -145,8 +147,8 @@ public class Match {
         ((firstPlayer == null && guest.getFirstPlayer() == null) || firstPlayer.equals(guest.getFirstPlayer())) &&
         ((secondPlayer == null && guest.getSecondPlayer() == null) || secondPlayer.equals(guest.getSecondPlayer())) &&
         ((status == null && guest.getStatus() == null) || status.equals(guest.getStatus())) &&
-        ((firstPlayerPits == null && guest.getFirstPlayerPits() == null) || firstPlayerPits.equals(guest.getFirstPlayerPits())) &&
-        ((secondPlayerPits == null && guest.getSecondPlayerPits() == null) || secondPlayerPits.equals(guest.getSecondPlayerPits())) &&
+        ((firstPlayerPits == null && guest.getFirstPlayerPits() == null) || Arrays.equals(firstPlayerPits, guest.getFirstPlayerPits())) &&
+        ((secondPlayerPits == null && guest.getSecondPlayerPits() == null) || Arrays.equals(secondPlayerPits, guest.getSecondPlayerPits())) &&
         ((playerTurn == null && guest.getPlayerTurn() == null) || playerTurn.equals(guest.getPlayerTurn())) &&
         ((winner == null && guest.getWinner() == null) || winner.equals(guest.getWinner())) &&
         ((tie == null && guest.getTie() == null) || tie.equals(guest.getTie()));

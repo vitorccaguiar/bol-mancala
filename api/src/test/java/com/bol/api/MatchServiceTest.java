@@ -1,5 +1,6 @@
 package com.bol.api;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.util.Pair;
 
 @SpringBootTest
 class MatchServiceTest {
@@ -295,30 +297,98 @@ class MatchServiceTest {
    */
   @Test
   void whenNoneLastStoneEmptyPit_shouldDoNothing() {
+    // After moveStones, an empty pit has 1
+    Match matchWithChanges = createMatchForTest();
+    Match matchWithoutChanges = createMatchForTest();
+    
+    Pair<Integer, Integer> finishedPositionAndPit = Pair.of(1, 1);
+    matchService.handleLastStoneEmptyPit(matchWithChanges, finishedPositionAndPit);
+    assertEquals(matchWithChanges, matchWithoutChanges);
+  }
 
+  Match createMatchForTest() {
+    Match match = new Match();
+    Integer[] firstPlayerPits = { 2, 2, 2, 2, 2, 1, 2 };
+    Integer[] secondPlayerPits = { 2, 1, 2, 2, 2, 2, 2 };
+    match.setFirstPlayerPits(firstPlayerPits);
+    match.setSecondPlayerPits(secondPlayerPits);
+    User player = new User();
+    player.setId("123");
+    match.setPlayerTurn(player);
+    match.setFirstPlayer(player);
+    User secondPlayer = new User();
+    secondPlayer.setId("321");
+    match.setSecondPlayer(secondPlayer);
+
+    return match;
   }
 
   @Test
   void whenOtherPlayerLastStoneEmptyPit_shouldDoNothing() {
+    // After moveStones, an empty pit has 1
+    Match matchWithChanges = createMatchForTest();
+    Match matchWithoutChanges = createMatchForTest();
     
+    Pair<Integer, Integer> finishedPositionAndPit = Pair.of(1, 2);
+    matchService.handleLastStoneEmptyPit(matchWithChanges, finishedPositionAndPit);
+    assertEquals(matchWithChanges, matchWithoutChanges);
   }
 
   @Test
   void whenLastStoneEmptyPit_shouldZeroLastPitAndSumIntoBigPit() {
+    // After moveStones, an empty pit has 1
+    Match matchWithChanges = createMatchForTest();
+    Match matchAfterChanges = createMatchForTest();
+    Integer[] firstPlayerPits = { 2, 2, 2, 2, 2, 0, 5 };
+    Integer[] secondPlayerPits = { 0, 1, 2, 2, 2, 2, 2 };
+    matchAfterChanges.setFirstPlayerPits(firstPlayerPits);
+    matchAfterChanges.setSecondPlayerPits(secondPlayerPits);
     
+    Pair<Integer, Integer> finishedPositionAndPit = Pair.of(5, 1);
+    matchService.handleLastStoneEmptyPit(matchWithChanges, finishedPositionAndPit);
+    assertEquals(matchWithChanges, matchAfterChanges);
   }
 
   /**
    * Tests for moveStones method
    */
   @Test
-  void whenHaveSixStonesAndPlayInLastPit_shouldSumOneEachNextSixPits() {
+  void whenHaveSixStonesAndPlayInLastPitFirstPlayer_shouldSumOneEachNextSixPits() {
+    Integer[] firstPits = { 2, 2, 2, 2, 2, 6, 2 };
+    Integer[] secondPits = { 2, 1, 2, 2, 2, 2, 2 };
 
+    Integer[] expectedFirstPits = { 2, 2, 2, 2, 2, 0, 3 };
+    Integer[] expectedSecondPits = { 3, 2, 3, 3, 3, 2, 2 };
+
+    matchService.moveStones(firstPits, secondPits, 5, true);
+    assertArrayEquals(firstPits, expectedFirstPits);
+    assertArrayEquals(secondPits, expectedSecondPits);
+  }
+
+  @Test
+  void whenHaveSixStonesAndPlayInLastPitSecondPlayer_shouldSumOneEachNextSixPits() {
+    Integer[] firstPits = { 2, 2, 2, 2, 2, 6, 2 };
+    Integer[] secondPits = { 2, 1, 2, 2, 2, 2, 2 };
+
+    Integer[] expectedFirstPits = { 2, 2, 2, 2, 2, 0, 3 };
+    Integer[] expectedSecondPits = { 3, 2, 3, 3, 3, 2, 2 };
+
+    matchService.moveStones(firstPits, secondPits, 5, false);
+    assertArrayEquals(firstPits, expectedFirstPits);
+    assertArrayEquals(secondPits, expectedSecondPits);
   }
 
   @Test
   void whenHaveEightStonesAndPlayInLastPit_shouldSumOneEachNextEightPits() {
-    
+    Integer[] firstPits = { 2, 2, 2, 2, 2, 8, 2 };
+    Integer[] secondPits = { 2, 1, 2, 2, 2, 2, 2 };
+
+    Integer[] expectedFirstPits = { 3, 2, 2, 2, 2, 0, 3 };
+    Integer[] expectedSecondPits = { 3, 2, 3, 3, 3, 3, 2 };
+
+    matchService.moveStones(firstPits, secondPits, 5, true);
+    assertArrayEquals(firstPits, expectedFirstPits);
+    assertArrayEquals(secondPits, expectedSecondPits);
   }
 
   /**

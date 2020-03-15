@@ -192,17 +192,17 @@ public class MatchService {
     return Pair.of(null, null);
   }
 
-  public Pair<Integer, Integer> moveStones(Integer[] firstPit, Integer[] secondPit, Integer playPosition, Boolean firstPlayer) {
-    Integer numberOfStones = firstPit[playPosition];
-    firstPit[playPosition] = 0;
+  public Pair<Integer, Integer> moveStones(Integer[] firstPits, Integer[] secondPits, Integer playPosition, Boolean firstPlayer) {
+    Integer numberOfStones = firstPits[playPosition];
+    firstPits[playPosition] = 0;
 
     Integer finishedPosition = 0;
     Integer finishedPit = -1;
     Integer moves = 0;
     while (!moves.equals(numberOfStones)) {
       Integer index = moves == 0 ? playPosition + 1 : 0;
-      for (Integer i = index; i < firstPit.length; i++) {
-        firstPit[i]++;
+      for (Integer i = index; i < firstPits.length; i++) {
+        firstPits[i]++;
         moves++;
         if (moves.equals(numberOfStones)) {
           finishedPosition = i;
@@ -210,8 +210,8 @@ public class MatchService {
           return Pair.of(finishedPosition, finishedPit);
         }
       }
-      for (int i = 0; i < secondPit.length - 1; i++) {
-        secondPit[i]++;
+      for (int i = 0; i < secondPits.length - 1; i++) {
+        secondPits[i]++;
         moves++;
         if (moves.equals(numberOfStones)) {
           finishedPosition = i;
