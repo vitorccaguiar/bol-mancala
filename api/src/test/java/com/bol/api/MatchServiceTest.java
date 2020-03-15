@@ -1,18 +1,44 @@
 package com.bol.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
+import com.bol.api.constant.ErrorMessage;
+import com.bol.api.constant.MessageStatus;
+import com.bol.api.entity.InputMessage;
 import com.bol.api.entity.Match;
+import com.bol.api.entity.OutputMessage;
 import com.bol.api.service.MatchService;
+import com.bol.api.service.UserService;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 class MatchServiceTest {
+
+  @Mock
+  private UserService userService;
+
+  @InjectMocks
+  private MatchService matchService;
 
   @Test
   void whenJoinMessageNonExistentPlayer_shouldReturnErrorMessage() {
+    InputMessage message = new InputMessage();
+    message.setType(MessageStatus.JOIN);
+    message.setPlayerId("");
 
+    matchService.setUserService(userService);
+    when(userService.getUserById("")).thenReturn(Optional.empty());
+    OutputMessage outputMessage = new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.PLAYER_NOT_FOUND);
+    assertEquals(outputMessage, matchService.join(message));
   }
 
   @Test
@@ -96,12 +122,10 @@ class MatchServiceTest {
   }
 
   //handleLastStoneEmptyPit
-  //firstPlayerPlay
-  //secondPlayerPlay
+  //moveStones
 
   @Test
   void whenFirstPlayerPitsAreAllEmpty_shouldEndGame() {
-    MatchService matchService = new MatchService();
     Match match = new Match();
     Integer[] firstPlayerPits = { 0, 0, 0, 0, 0, 0, 5 };
     Integer[] secondPlayerPits = { 1, 0, 0, 0, 0, 0, 5 };
@@ -113,7 +137,6 @@ class MatchServiceTest {
 
   @Test
   void whenSecondPlayerPitsAreAllEmpty_shouldEndGame() {
-    MatchService matchService = new MatchService();
     Match match = new Match();
     Integer[] firstPlayerPits = { 1, 0, 0, 0, 0, 0, 5 };
     Integer[] secondPlayerPits = { 0, 0, 0, 0, 0, 0, 5 };
@@ -125,7 +148,6 @@ class MatchServiceTest {
 
   @Test
   void whenBothPitsAreAllEmpty_shouldEndGame() {
-    MatchService matchService = new MatchService();
     Match match = new Match();
     Integer[] firstPlayerPits = { 0, 0, 0, 0, 0, 0, 5 };
     Integer[] secondPlayerPits = { 0, 0, 0, 0, 0, 0, 5 };
@@ -137,7 +159,6 @@ class MatchServiceTest {
 
   @Test
   void whenBothPitsAreNotEmpty_shouldNotEndGame() {
-    MatchService matchService = new MatchService();
     Match match = new Match();
     Integer[] firstPlayerPits = { 1, 0, 0, 0, 0, 0, 5 };
     Integer[] secondPlayerPits = { 1, 0, 0, 0, 0, 0, 5 };

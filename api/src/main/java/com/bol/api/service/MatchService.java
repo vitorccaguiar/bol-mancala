@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import com.bol.api.constant.ErrorMessage;
 import com.bol.api.constant.MatchStatus;
 import com.bol.api.constant.MessageStatus;
 import com.bol.api.entity.InputMessage;
@@ -58,14 +59,14 @@ public class MatchService {
           logger.info(MessageStatus.PLAYING + " {}", "Second player joined in the match");
           return new OutputMessage(MessageStatus.READY, match.get(), "Second player joined in the match");
         }
-        logger.error(MessageStatus.ERROR + " {}", "Invalid match");
-        return new OutputMessage(MessageStatus.ERROR, null, "Invalid match");
+        logger.error(MessageStatus.ERROR + " {}", ErrorMessage.INVALID_MATCH);
+        return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.INVALID_MATCH);
       }
-      logger.error(MessageStatus.ERROR + " {}", "Player not found");
-      return new OutputMessage(MessageStatus.ERROR, null, "Player not found");
+      logger.error(MessageStatus.ERROR + " {}", ErrorMessage.PLAYER_NOT_FOUND);
+      return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.PLAYER_NOT_FOUND);
     } catch (Exception ex) {
       logger.error(ex.getMessage());
-      return new OutputMessage(MessageStatus.ERROR, null, "Unexpected error occurred while joining the match");
+      return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.UNEXPECTED_JOIN);
     }
   }
 
@@ -99,7 +100,7 @@ public class MatchService {
       return new OutputMessage(MessageStatus.ERROR, null, "Is not " + playerName + "'s turn");
     } catch (Exception ex) {
       logger.error(ex.getMessage());
-      return new OutputMessage(MessageStatus.ERROR, null, "Unexpected error occurred while trying to play");
+      return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.UNEXPECTED_PLAY);
     }
   }
 
@@ -146,8 +147,8 @@ public class MatchService {
         match.setFirstPlayerPits(firstPlayerPits);
         match.setSecondPlayerPits(secondPlayerPits);
       }
-    } else if (finishedPit.equals(2) && playerTurnId.equals(match.getSecondPlayer().getId())) {
-      if (match.getSecondPlayerPits()[finishedPosition].equals(1)) {
+    } else if (playerTurnId.equals(match.getSecondPlayer().getId())) {
+      if (finishedPit.equals(2) && match.getSecondPlayerPits()[finishedPosition].equals(1)) {
         secondPlayerPits[6] += secondPlayerPits[finishedPosition] + firstPlayerPits[5 - finishedPosition];
         secondPlayerPits[finishedPosition] = 0;
         firstPlayerPits[5 - finishedPosition] = 0;
@@ -182,15 +183,15 @@ public class MatchService {
     String playerTurnId = match.getPlayerTurn().getId();
 
     if (playerTurnId.equals(firstPlayerId)) {
-      return doPlay(match.getFirstPlayerPits(), match.getSecondPlayerPits(), playPosition, true);
+      return moveStones(match.getFirstPlayerPits(), match.getSecondPlayerPits(), playPosition, true);
     } else if (playerTurnId.equals(secondPlayerId)) {
-      return doPlay(match.getSecondPlayerPits(), match.getFirstPlayerPits(), playPosition, false);
+      return moveStones(match.getSecondPlayerPits(), match.getFirstPlayerPits(), playPosition, false);
     }
 
     return Pair.of(null, null);
   }
 
-  public Pair<Integer, Integer> doPlay(Integer[] firstPit, Integer[] secondPit, Integer playPosition, Boolean firstPlayer) {
+  public Pair<Integer, Integer> moveStones(Integer[] firstPit, Integer[] secondPit, Integer playPosition, Boolean firstPlayer) {
     Integer numberOfStones = firstPit[playPosition];
     firstPit[playPosition] = 0;
 
@@ -249,5 +250,19 @@ public class MatchService {
       return result.get();
     }
     return null;
+  }
+
+  /**
+   * @return the userService
+   */
+  public UserService getUserService() {
+    return userService;
+  }
+
+  /**
+   * @param userService the userService to set
+   */
+  public void setUserService(UserService userService) {
+    this.userService = userService;
   }
 }

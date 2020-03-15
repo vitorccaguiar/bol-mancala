@@ -130,4 +130,26 @@ public class Match {
     this.tie = tie;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+      if (obj == this) {
+          return true;
+      }
+
+      if (obj == null || obj.getClass() != this.getClass()) {
+          return false;
+      }
+
+      Match guest = (Match) obj;
+      return id.equals(guest.getId()) &&
+        ((firstPlayer == null && guest.getFirstPlayer() == null) || firstPlayer.equals(guest.getFirstPlayer())) &&
+        ((secondPlayer == null && guest.getSecondPlayer() == null) || secondPlayer.equals(guest.getSecondPlayer())) &&
+        status.equals(guest.getStatus()) &&
+        firstPlayerPits.equals(guest.getFirstPlayerPits()) &&
+        secondPlayerPits.equals(guest.getSecondPlayerPits()) &&
+        ((playerTurn == null && guest.getPlayerTurn() == null) || playerTurn.equals(guest.getPlayerTurn())) &&
+        winner.equals(guest.getWinner()) &&
+        tie.equals(guest.getTie());
+  }
+
 }
