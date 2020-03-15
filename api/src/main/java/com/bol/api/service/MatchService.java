@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import com.bol.api.constant.ErrorMessage;
 import com.bol.api.constant.MatchStatus;
 import com.bol.api.constant.MessageStatus;
+import com.bol.api.constant.SuccessMessage;
 import com.bol.api.entity.InputMessage;
 import com.bol.api.entity.Match;
 import com.bol.api.entity.OutputMessage;
@@ -56,8 +57,8 @@ public class MatchService {
   
           playerMatch.put(message.getPlayerId(), match.get().getId());
           playerMachine.put(message.getPlayerId(), message.getFingerprint());
-          logger.info(MessageStatus.PLAYING + " {}", "Second player joined in the match");
-          return new OutputMessage(MessageStatus.READY, match.get(), "Second player joined in the match");
+          logger.info(MessageStatus.PLAYING + " {}", SuccessMessage.JOINED);
+          return new OutputMessage(MessageStatus.READY, match.get(), SuccessMessage.JOINED);
         }
         logger.error(MessageStatus.ERROR + " {}", ErrorMessage.INVALID_MATCH);
         return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.INVALID_MATCH);
@@ -92,8 +93,8 @@ public class MatchService {
           logger.info(MessageStatus.PLAYING + " {}", match);
           return new OutputMessage(MessageStatus.PLAYING, match, "Next turn");
         }
-        logger.error(MessageStatus.ERROR + " {}", "Is not " + message.getMatchId() + " match");
-        return new OutputMessage(MessageStatus.ERROR, null, "");
+        logger.error(MessageStatus.ERROR + " {}", ErrorMessage.INVALID_PLAYER);
+        return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.INVALID_PLAYER);
       }
       String playerName = userService.getUserById(message.getPlayerId()).get().getName();
       logger.error(MessageStatus.ERROR + " {}", "Is not " + playerName + " turn");
@@ -250,19 +251,5 @@ public class MatchService {
       return result.get();
     }
     return null;
-  }
-
-  /**
-   * @return the userService
-   */
-  public UserService getUserService() {
-    return userService;
-  }
-
-  /**
-   * @param userService the userService to set
-   */
-  public void setUserService(UserService userService) {
-    this.userService = userService;
   }
 }

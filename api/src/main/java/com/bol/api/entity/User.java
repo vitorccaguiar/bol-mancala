@@ -12,6 +12,13 @@ public class User {
   }
 
   /**
+   * @param id the id to set
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
    * @return the name
    */
   public String getName() {
