@@ -6,7 +6,7 @@
       {{ playerId === match?.firstPlayer?.id ? match?.secondPlayer?.name : match?.firstPlayer?.name }}
     </p>
     <mat-card class="board">
-      <mat-card class="bigPit">
+      <mat-card class="bigPit" style="background-color: rgb(201, 203, 251)">
         <strong>Big pit</strong>
         <div class="counter">
           <p>{{ playerId === match?.firstPlayer?.id ? match?.secondPlayerPits[6] : match?.firstPlayerPits[6] }}</p>
@@ -14,47 +14,47 @@
       </mat-card>
       <div class="pits-wrapper">
         <div class="pits">
-          <mat-card class="pit" (click)="play(0, 2)">
+          <mat-card class="secondPit" (click)="play(0, 2)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.secondPlayerPits[5] : match?.firstPlayerPits[5] }}</p>
           </mat-card>
-          <mat-card class="pit" (click)="play(1, 2)">
+          <mat-card class="secondPit" (click)="play(1, 2)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.secondPlayerPits[4] : match?.firstPlayerPits[4] }}</p>
           </mat-card>
-          <mat-card class="pit" (click)="play(2, 2)">
+          <mat-card class="secondPit" (click)="play(2, 2)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.secondPlayerPits[3] : match?.firstPlayerPits[3] }}</p>
           </mat-card>
-          <mat-card class="pit" (click)="play(3, 2)">
+          <mat-card class="secondPit" (click)="play(3, 2)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.secondPlayerPits[2] : match?.firstPlayerPits[2] }}</p>
           </mat-card>
-          <mat-card class="pit" (click)="play(4, 2)">
+          <mat-card class="secondPit" (click)="play(4, 2)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.secondPlayerPits[1] : match?.firstPlayerPits[1] }}</p>
           </mat-card>
-          <mat-card class="pit" (click)="play(5, 2)">
+          <mat-card class="secondPit" (click)="play(5, 2)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.secondPlayerPits[0] : match?.firstPlayerPits[0] }}</p>
           </mat-card>
         </div>
         <div class="pits">
-          <mat-card class="pit" (click)="play(0, 1)">
+          <mat-card class="firstPit" (click)="play(0, 1)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.firstPlayerPits[0] : match?.secondPlayerPits[0] }}</p>
           </mat-card>
-          <mat-card class="pit" (click)="play(1, 1)">
+          <mat-card class="firstPit" (click)="play(1, 1)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.firstPlayerPits[1] : match?.secondPlayerPits[1] }}</p>
           </mat-card>
-          <mat-card class="pit" (click)="play(2, 1)">
+          <mat-card class="firstPit" (click)="play(2, 1)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.firstPlayerPits[2] : match?.secondPlayerPits[2] }}</p>
           </mat-card>
-          <mat-card class="pit" (click)="play(3, 1)">
+          <mat-card class="firstPit" (click)="play(3, 1)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.firstPlayerPits[3] : match?.secondPlayerPits[3] }}</p>
           </mat-card>
-          <mat-card class="pit" (click)="play(4, 1)">
+          <mat-card class="firstPit" (click)="play(4, 1)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.firstPlayerPits[4] : match?.secondPlayerPits[4] }}</p>
           </mat-card>
-          <mat-card class="pit" (click)="play(5, 1)">
+          <mat-card class="firstPit" (click)="play(5, 1)">
             <p class="counter">{{ playerId === match?.firstPlayer?.id ? match?.firstPlayerPits[5] : match?.secondPlayerPits[5] }}</p>
           </mat-card>
         </div>
       </div>
-      <mat-card class="bigPit">
+      <mat-card class="bigPit" style="background-color: rgb(255, 192, 192)">
         <strong>Big pit</strong>
         <div class="counter">
           <p>{{ playerId === match?.firstPlayer?.id ? match?.firstPlayerPits[6] : match?.secondPlayerPits[6] }}</p>
