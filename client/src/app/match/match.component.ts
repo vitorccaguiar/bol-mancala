@@ -7,6 +7,7 @@ import { OutputMessage } from '../objects/output-message';
 import { InputMessage } from '../objects/input-message';
 import { MessageStatus } from '../objects/message-status';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatchStatus } from '../objects/match-status';
 
 @Component({
   selector: 'app-match',
@@ -31,6 +32,7 @@ export class MatchComponent implements OnInit {
     this.stompClient.connect({}, (frame) => {
       this.listenJoin();
       this.listenPlay();
+      this.listenLeave();
     });
   }
 
@@ -55,10 +57,11 @@ export class MatchComponent implements OnInit {
           duration: 3000
         });
       } else if (outputMessage.type === MessageStatus.FINISHED &&
-        outputMessage.errorMessage === MessageStatus.PLAYER_LEFT) {
+        outputMessage.message === MessageStatus.PLAYER_LEFT) {
           this.snackbar.open('Player abandoned the match, the winner is ' + outputMessage.match.winner + '!', 'Close', {
             duration: 10000
           });
+          this.match = outputMessage.match;
         } else {
           this.match = outputMessage.match;
         }
@@ -69,7 +72,7 @@ export class MatchComponent implements OnInit {
     this.stompClient.subscribe('/match/play', (socketResult: any) => {
       const outputMessage = JSON.parse(socketResult.body) as OutputMessage;
       if (outputMessage.type === MessageStatus.ERROR) {
-        this.snackbar.open(outputMessage.errorMessage, 'Close', {
+        this.snackbar.open(outputMessage.message, 'Close', {
           duration: 5000
         });
       } else {
