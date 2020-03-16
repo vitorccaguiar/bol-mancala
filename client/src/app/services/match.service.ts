@@ -21,19 +21,16 @@ export class MatchService extends BaseService {
     return Stomp.over(socket);
   }
 
-  // disconnect() {
-  //     if (this.stompClient !== null) {
-  //         this.stompClient.disconnect();
-  //     }
-  //     console.log('Disconnected');
-  // }
-
   sendJoinMessage(stompClient: any, message: InputMessage): void {
     stompClient.send('/app/join', {}, JSON.stringify(message));
   }
 
   sendPlayMessage(stompClient: any, message: InputMessage): void {
     stompClient.send('/app/play', {}, JSON.stringify(message));
+  }
+
+  sendLeaveMessage(stompClient: any, message: InputMessage): void {
+    stompClient.send('/app/leave', {}, JSON.stringify(message));
   }
 
   getMatchById(matchId: string): Promise<any> {

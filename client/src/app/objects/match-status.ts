@@ -1,5 +1,5 @@
 export enum MatchStatus {
-  WAITING_PLAYER = 'Waiting player',
-  PLAYING = 'Playing',
-  FINISHED = 'Finished'
+  WAITING_PLAYER = 'waiting player',
+  PLAYING = 'playing',
+  FINISHED = 'finished'
 }

@@ -40,6 +40,8 @@ public class MatchService {
       return join(message);
     } else if (message.getType().equals(MessageStatus.PLAY)) {
       return play(message);
+    } else if (message.getType().equals(MessageStatus.LEAVE)) {
+      return leave(message);
     }
     logger.error(MessageStatus.ERROR + " {}", "No message type found");
     return new OutputMessage(MessageStatus.ERROR, null, "Invalid action");
@@ -65,6 +67,29 @@ public class MatchService {
       }
       logger.error(MessageStatus.ERROR + " {}", ErrorMessage.PLAYER_NOT_FOUND);
       return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.PLAYER_NOT_FOUND);
+    } catch (Exception ex) {
+      logger.error(ex.getMessage());
+      return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.UNEXPECTED_JOIN);
+    }
+  }
+
+  public OutputMessage leave(InputMessage message) {
+    try {
+      if (isPlayerMatch(message.getPlayerId(), message.getFingerprint(), message.getMatchId())) {
+        Match match = matchRepository.findById(message.getMatchId()).get();
+        match.setStatus(MatchStatus.PLAYER_LEFT);
+        if (match.getFirstPlayer().getId().equals(message.getPlayerId())) {
+          match.setWinner(match.getSecondPlayer().getName());
+        } else {
+          match.setWinner(match.getFirstPlayer().getName());
+        }
+        matchRepository.save(match);
+
+        logger.info(MessageStatus.FINISHED + " {}", SuccessMessage.PLAYER_LEFT);
+        return new OutputMessage(MessageStatus.FINISHED, match, SuccessMessage.PLAYER_LEFT);
+      }
+      logger.error(MessageStatus.ERROR + " {}", ErrorMessage.INVALID_MATCH);
+      return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.INVALID_MATCH);
     } catch (Exception ex) {
       logger.error(ex.getMessage());
       return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.UNEXPECTED_JOIN);

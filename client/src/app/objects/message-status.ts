@@ -5,4 +5,6 @@ export enum MessageStatus {
   PLAYING = 'playing',
   FINISHED = 'finished',
   ERROR = 'error',
+  LEAVE = 'leave',
+  PLAYER_LEFT = 'Player left the match'
 }

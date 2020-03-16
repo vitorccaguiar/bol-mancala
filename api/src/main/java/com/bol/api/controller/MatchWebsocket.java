@@ -27,4 +27,10 @@ public class MatchWebsocket {
     return matchService.send(message);
   }
 
+  @MessageMapping("/leave")
+  @SendTo("/match/leave")
+  public OutputMessage sendLeave(InputMessage message) {
+    return matchService.send(message);
+  }
+
 }

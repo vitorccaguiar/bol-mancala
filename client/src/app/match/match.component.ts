@@ -27,7 +27,6 @@ export class MatchComponent implements OnInit {
     this.match.id = localStorage.getItem('matchId');
     const result = await this.matchService.getMatchById(this.match.id);
     this.match = JSON.parse(result) as Match;
-    console.log(this.match);
     this.stompClient = this.matchService.getStompClient();
     this.stompClient.connect({}, (frame) => {
       this.listenJoin();
@@ -45,6 +44,24 @@ export class MatchComponent implements OnInit {
       } else {
         this.match = outputMessage.match;
       }
+    });
+  }
+
+  listenLeave() {
+    this.stompClient.subscribe('/match/leave', (socketResult: any) => {
+      const outputMessage = JSON.parse(socketResult.body) as OutputMessage;
+      if (outputMessage.type === MessageStatus.ERROR) {
+        this.snackbar.open('Error while player tried to leave the match!', 'Close', {
+          duration: 3000
+        });
+      } else if (outputMessage.type === MessageStatus.FINISHED &&
+        outputMessage.errorMessage === MessageStatus.PLAYER_LEFT) {
+          this.snackbar.open('Player abandoned the match, the winner is ' + outputMessage.match.winner + '!', 'Close', {
+            duration: 10000
+          });
+        } else {
+          this.match = outputMessage.match;
+        }
     });
   }
 
@@ -76,7 +93,17 @@ export class MatchComponent implements OnInit {
     });
   }
 
-  leave(): void {
+  async leave(): Promise<void> {
+    const message = new InputMessage();
+    message.type = MessageStatus.LEAVE;
+    message.playerId = localStorage.getItem('playerId');
+    message.matchId = localStorage.getItem('matchId');
+    message.fingerprint = await this.getWorkstationFingerprint();
+    this.matchService.sendLeaveMessage(this.stompClient, message);
+    this.router.navigate(['menu']);
+  }
+
+  menu(): void {
     this.router.navigate(['menu']);
   }
 
@@ -88,7 +115,7 @@ export class MatchComponent implements OnInit {
       message.matchId = localStorage.getItem('matchId');
       message.fingerprint = await this.getWorkstationFingerprint();
       message.playPosition = playPosition;
-  
+
       this.matchService.sendPlayMessage(this.stompClient, message);
     } else {
       this.snackbar.open('That is not your side on the board!', 'Close', {

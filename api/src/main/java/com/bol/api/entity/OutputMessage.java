@@ -3,12 +3,12 @@ package com.bol.api.entity;
 public class OutputMessage {
   private String type;
   private Match match;
-  private String errorMessage;
+  private String message;
 
-  public OutputMessage(String type, Match match, String errorMessage) {
+  public OutputMessage(String type, Match match, String message) {
     this.type = type;
     this.match = match;
-    this.errorMessage = errorMessage;
+    this.message = message;
   }
 
   /**
@@ -42,15 +42,15 @@ public class OutputMessage {
   /**
    * @return the errorMessage
    */
-  public String getErrorMessage() {
-    return errorMessage;
+  public String getMessage() {
+    return message;
   }
 
   /**
    * @param errorMessage the errorMessage to set
    */
-  public void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
+  public void setMessage(String message) {
+    this.message = message;
   }
 
   @Override
@@ -66,6 +66,6 @@ public class OutputMessage {
     OutputMessage guest = (OutputMessage) obj;
     return type.equals(guest.getType()) &&
         ((match == null && guest.getMatch() == null) || match.equals(guest.getMatch())) &&
-        errorMessage.equals(guest.getErrorMessage());
+        message.equals(guest.getMessage());
   }
 }
