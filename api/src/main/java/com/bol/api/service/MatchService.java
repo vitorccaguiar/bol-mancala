@@ -110,8 +110,8 @@ public class MatchService {
             logger.info(MessageStatus.FINISHED + " {}", "The match is over");
             return new OutputMessage(MessageStatus.FINISHED, match, "The match is over");
           }
-          handleLastStoneEmptyPit(match, finishedPositionAndPit);
           if (!isLastStoneBigPit(finishedPositionAndPit.getFirst())) {
+            handleLastStoneEmptyPit(match, finishedPositionAndPit);
             changePlayerTurn(match);
           }
           matchRepository.save(match);
