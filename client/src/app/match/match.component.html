@@ -2,7 +2,7 @@
   <h2>Match</h2>
   <mat-divider></mat-divider>
   <div class="grid">
-    <p class="playerName" style="margin-top: 32px;">
+    <p *ngIf="match?.status === 'playing'" class="firstPlayerName" style="margin-top: 32px;">
       {{ playerId === match?.firstPlayer?.id ? match?.secondPlayer?.name : match?.firstPlayer?.name }}
     </p>
     <mat-card class="board">
@@ -61,7 +61,7 @@
         </div>
       </mat-card>
     </mat-card>
-    <p class="playerName"> {{ playerId === match?.firstPlayer?.id ? match?.firstPlayer?.name : match?.secondPlayer?.name }} </p>
+    <p class="secondPlayerName"> {{ playerId === match?.firstPlayer?.id ? match?.firstPlayer?.name : match?.secondPlayer?.name }} </p>
   </div>
   <div class="winner" *ngIf="match?.status === 'finished'">
     <strong>{{ match?.winner + ' won!' }}</strong>
