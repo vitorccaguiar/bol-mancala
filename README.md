@@ -16,6 +16,7 @@
 
 **Frontend:**
 
+- Run npm install inside the client folder
 - Run 'ng s' inside the client folder
 
 ---
