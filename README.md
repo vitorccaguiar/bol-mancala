@@ -29,16 +29,20 @@
 
 ### Screenshots
 
+---
 **Register:**
+---
 
 ![](./screenshots/Register.png)
----
 
+---
 **Lobby:**
+---
 
 ![](./screenshots/Lobby.png)
----
 
+---
 **Match:**
+---
 
 ![](./screenshots/Match.png)
