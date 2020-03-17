@@ -206,6 +206,62 @@ class MatchServiceTest {
   }
 
   /**
+   * Tests for leave method
+   */
+  @Test
+  void whenIsNotPlayerMatchOnLeaveMatch_shouldReturnInvalidMatch() {
+    MatchService.playerMatch.put("123", "987");
+    MatchService.playerMachine.put("123", "789");
+    InputMessage message = new InputMessage();
+    message.setMatchId("789");
+    message.setPlayerId("321");
+    message.setFingerprint("987");
+
+    OutputMessage outputMessage = new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.INVALID_MATCH);
+    assertEquals(outputMessage, matchService.leave(message));
+    MatchService.playerMatch.clear();
+    MatchService.playerMachine.clear();
+  }
+
+  @Test
+  void whenLeaveMatch_shouldChangeMatchStatusAndWinner() {
+    MatchService.playerMatch.put("123", "987");
+    MatchService.playerMachine.put("123", "789");
+    InputMessage message = new InputMessage();
+    message.setMatchId("987");
+    message.setPlayerId("123");
+    message.setFingerprint("789");
+
+    User firstPlayer = new User();
+    firstPlayer.setId("123");
+
+    User secondPlayer = new User();
+    secondPlayer.setName("Vitor");
+
+    Match match = new Match();
+    match.setFirstPlayer(firstPlayer);
+    match.setSecondPlayer(secondPlayer);
+
+    Match resultMatch = new Match();
+    resultMatch.setFirstPlayer(firstPlayer);
+    resultMatch.setSecondPlayer(secondPlayer);
+    resultMatch.setStatus(MatchStatus.PLAYER_LEFT);
+    resultMatch.setWinner("Vitor");
+
+    when(matchRepository.findById("987")).thenReturn(Optional.of(match));
+    OutputMessage outputMessage = new OutputMessage(MessageStatus.FINISHED, resultMatch, SuccessMessage.PLAYER_LEFT);
+    assertEquals(outputMessage, matchService.leave(message));
+    MatchService.playerMatch.clear();
+    MatchService.playerMachine.clear();
+  }
+
+  @Test
+  void whenExceptionOnLeaveMatch_shouldReturnUnexpectedLeave() {
+    OutputMessage outputMessage = new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.UNEXPECTED_LEAVE);
+    assertEquals(outputMessage, matchService.leave(null));
+  }
+
+  /**
    * Tests for IsPlayerTurn method
    */
   @Test

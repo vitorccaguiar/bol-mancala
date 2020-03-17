@@ -92,7 +92,7 @@ public class MatchService {
       return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.INVALID_MATCH);
     } catch (Exception ex) {
       logger.error(ex.getMessage());
-      return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.UNEXPECTED_JOIN);
+      return new OutputMessage(MessageStatus.ERROR, null, ErrorMessage.UNEXPECTED_LEAVE);
     }
   }
 
@@ -151,7 +151,7 @@ public class MatchService {
   public Boolean isPlayerMatch(String playerId, String fingerprint, String matchId) {
     String realMatchId = playerMatch.get(playerId);
     String realFingerprint = playerMachine.get(playerId);
-    if (realMatchId.equals(matchId) && realFingerprint.equals(fingerprint)) {
+    if (matchId.equals(realMatchId) && fingerprint.equals(realFingerprint)) {
       return true;
     } else {
       return false;
