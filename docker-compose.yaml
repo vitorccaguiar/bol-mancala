@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  api:
+    container_name: api
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    links:
+      - mongo
+
+  mongo:
+    image: mongo
+    volumes:
+      - mongodb:/data/db
+      - mongodb_config:/data/configdb
+    ports:
+        - 27017:27017
+
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - api
+
+volumes:
+  mongodb:
+  mongodb_config:
