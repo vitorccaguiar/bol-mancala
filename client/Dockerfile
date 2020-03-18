@@ -6,5 +6,6 @@ COPY ./ ./
 ARG env=prod
 RUN npm run build
 
-FROM nginx:1.17
+FROM nginx
 COPY --from=node /usr/src/app/client/dist/client /usr/share/nginx/html
+COPY ./nginx-custom.conf /etc/nginx/conf.d/default.conf
