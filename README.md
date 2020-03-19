@@ -9,6 +9,7 @@
 **Without Docker**
 - JDK 8
 - Angular CLI
+- MongoDB
 
 ---
 
@@ -20,6 +21,7 @@
 **Without Docker**
 
 - Backend
+    - Uncomment the lines from 'api/src/main/resources/application.properties' in order to MongoDB work locally (the mongo client should be executing)
     - Generate the JAR file through maven and run it (api folder). It is also possible by pressing play in your IDE like Eclipse, VS Code, so on.
 
 - Frontend
